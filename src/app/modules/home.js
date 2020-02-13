@@ -260,7 +260,7 @@ window.addLike = (id, liked, likeElem)=>{
 
 let thisSlide;
 
-function openGood(id) {
+function openGood(id, addH = true) {
     let openGood = {
         'action'   : 'openGood',
         'openable' : id
@@ -334,7 +334,7 @@ function openGood(id) {
 
                         // ADD TO HISTORY
                 window.story = false;
-                historyUp(res['id'], true);
+                if(addH) historyUp(res['id'], true);
                 
             })
         });

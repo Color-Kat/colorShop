@@ -72,7 +72,7 @@ window.onpopstate = function(event) {
         }
        
         // if the page is goodPage
-        else openGood(prevPage.page_name);
+        else openGood(prevPage.page_name, false);
     }
 };
         // HISTORY END
