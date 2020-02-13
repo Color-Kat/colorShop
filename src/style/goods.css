@@ -1,0 +1,223 @@
+#goods{
+    width: 100%;
+    height: 100%;
+    margin-top: 300%;
+    padding-top: 5%;
+}
+#loadGoods{
+    top: 100%;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    animation: load linear 1s infinite;
+    z-index: 10;
+    transform-origin: center;
+    background: linear-gradient(to bottom right, #39B9FF, #003BE4);
+    border-radius: 50%;
+    display: none;
+}
+.goods-card{
+    position: absolute;
+    margin: 0.5%;
+    z-index: 1;
+    background: white;
+    border-radius: 8%;
+    overflow: hidden;
+    cursor: pointer;
+}
+.goods-card *{
+    pointer-events: none;
+}
+.grid-sizer{
+    width: 32%;
+}
+.goodImg{
+    width: 100%;
+}
+.goodFooter{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    color: rgb(44, 44, 44);
+    font-family: DejaVu Sans Mono;
+    width: 100%;
+    padding: 7px 5%;
+    /* background: linear-gradient(to bottom right, #39B9FF, #003BE4); */
+    background: linear-gradient(160deg, #39B9FF 10%, #003BE4);
+}
+.goodName{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-top: 2px;
+    position: relative;
+    width: 95%;
+    font-weight: 400;
+    font-size: 14pt;
+    /* margin-bottom: calc(100%/2px); */
+    margin-bottom: 10px;
+    transform: scale(1, 1.2);
+}
+.goodCost{
+    font-family: DejaVu Sans Mono;
+    position: relative;
+    bottom: 10%;
+    font-size: 20pt;
+}
+.goodLike{
+    position: absolute;
+    bottom: 10%;
+    right: 5%;
+    font-size: 25px;
+    pointer-events: all;
+    z-index: 100;
+}
+.goodLike[data-goodLike="true"]{
+    color: white;
+}
+.goodLike:hover{
+    color: white;
+}
+
+#goods h2{
+    margin-top: 5%;
+    width: 100%;
+    height: 50px;
+    font-size: 50px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+}
+/* #goodEmpty{
+    position: absolute;
+    left: 50%;
+    width: 90%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 40px;
+    text-align: center;
+    color: rgba(77,77,77);
+    font-family: DejaVu Sans Mono;
+    font-weight: 100;
+} */
+
+@keyframes load {
+    from{
+        transform: rotateZ(1deg);
+    }
+    to{
+        transform: rotateZ(360deg);
+    }
+}
+
+@font-face { 
+    font-family: "rouble";
+    src: url("/full_path/fonts/rouble.otf") format("opentype");
+}
+.rub { font-family: "rouble"; }
+
+@media screen and (min-width: 2000px){
+    .goodName{
+        font-size: 22pt;
+    }
+    .goodCost{
+        font-size: 28pt;
+    }
+}
+
+@media screen and (max-width: 1700px){
+    .goodName{
+        font-size: 14pt;
+    }
+}
+
+@media screen and (max-width: 1380px){
+    .goodName{
+        font-size: 13pt;
+    }
+}
+
+@media screen and (max-width: 1040px){
+    .goodName{
+        font-size: 10pt;
+    }
+    #color{
+        width: 60% !important;
+    }
+    #heightMain{
+        width: 7% !important;
+    }
+    #color{
+        width: 80% !important;
+    }
+}
+@media screen and (max-width: 550px){
+    .goods-card{
+        width: 45%;
+    }
+}
+
+@media screen and (max-width: 750px){
+    .grid-sizer{
+        width: 49% !important;
+    }
+}
+
+@media screen and (max-width: 720px){
+    .goodCost{
+        bottom: 0px;
+        font-size: 19pt;
+    }
+    #heightMain{
+        width: 55% !important;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 7% !important;
+        display: inline !important;
+        flex-wrap: nowrap !important;
+    }
+    #navigation{
+        border-radius: 0 0 35px 35px !important;
+        margin: 0 !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .navEl{
+        width: 25% !important;
+        position: relative !important;
+        border: none !important;
+        border-right: 1px solid rgba(77, 77, 77, 1);
+        box-shadow: 1px 0 1px -1px black !important;
+        display: inline-flex !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+@media screen and (max-width: 660px){
+    .goodName{
+        font-size: 12pt;
+    }
+    .goodCost{
+        font-size: 15pt;
+    }
+    .goods-card{
+        margin: 1%;
+    }
+    .grid-sizer{
+        width: 48% !important;
+    }
+}
+@media screen and (max-width: 480px){
+    .goodName{
+        font-size: 10pt;
+    }
+    .goodCost{
+        font-size: 13pt;
+    }
+    #color{
+        width: 93% !important;
+    }
+}

@@ -1,0 +1,290 @@
+@font-face {
+    font-family: 'icomoon';
+    src:  url('fonts/icomoon.eot?r80fqw');
+    src:  url('fonts/icomoon.eot?r80fqw#iefix') format('embedded-opentype'),
+      url('fonts/icomoon.ttf?r80fqw') format('truetype'),
+      url('fonts/icomoon.woff?r80fqw') format('woff'),
+      url('fonts/icomoon.svg?r80fqw#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+  }
+  
+  [class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+  
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .icon-heart:before {
+    content: "\e900";
+  }
+  .icon-newspaper:before {
+    content: "\e904";
+  }
+  .icon-phone:before {
+    content: "\e942";
+  }
+  .icon-envelop:before {
+    content: "\e945";
+  }
+  .icon-box-add:before {
+    content: "\e95e";
+  }
+  .icon-bubbles2:before {
+    content: "\e96d";
+  }
+  .icon-user:before {
+    content: "\e971";
+  }
+  .icon-search:before {
+    content: "\e986";
+  }
+  .icon-equalizer:before {
+    content: "\e992";
+  }
+  .icon-clipboard:before {
+    content: "\e9b8";
+  }
+  .icon-checkmark:before {
+    content: "\ea10";
+  }
+  .icon-checkmark2:before {
+    content: "\ea11";
+  }
+  .icon-volume-medium:before {
+    content: "\ea27";
+  }
+  .icon-volume-low:before {
+    content: "\ea28";
+  }
+  .icon-volume-mute2:before {
+    content: "\ea2a";
+  }
+  .icon-circle-up:before {
+    content: "\ea41";
+  }
+  .icon-enter:before {
+    content: "\ea13";
+  }
+  .icon-circle-down:before {
+    content: "\ea43";
+  }
+  .icon-pencil:before {
+    content: "\e905";
+  }
+  .icon-cancel-circle:before {
+    content: "\ea0d";
+  }
+  .icon-paragraph-left:before {
+    content: "\ea77";
+  }
+  .icon-mail4:before {
+    content: "\ea86";
+  }
+  .icon-instagram:before {
+    content: "\ea92";
+  }
+  .icon-vk:before {
+    content: "\ea98";
+  }
+  .icon-IcoMoon:before {
+    content: "\eaea";
+  }
+  .icon-sort-amount-desc:before {
+    content: "\ea4d";
+  }
+  
+
+#navigation{
+    /* margin-top: 5%; */
+    margin: auto;
+    position: absolute;
+    width: 100%;
+    height: 60%;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(250, 250, 250, 0.6);
+    border-radius: 0 35px 35px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.navEl{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    border-bottom: 1px solid rgba(77, 77, 77, 1);
+    box-shadow: 0 1px 1px -1px black;
+    color: rgba(77, 77, 77, 1);
+    font-size: 20px;
+}
+.navEl:nth-child(4){
+    border: none !important;
+    box-shadow: none !important;
+}
+.navEl:hover{
+    background: linear-gradient(to bottom right, #39B9FF, #003BE4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #003BE4;
+}
+
+#search{
+    position: absolute;
+    background: rgba(250, 250, 250, 0.8);
+    border-radius: 1000px;
+    width: 55%;
+    height: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    align-items: center;
+    color: rgba(77, 77, 77, 1);
+    z-index: 1000;
+    transition: all .3s ease-in-out;
+}
+#black{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .5);
+    z-index: 100;
+    display: none;
+}
+#search span{
+    position: absolute;
+    right: 5%;
+    font-size: 30px;
+}
+#search span:hover{
+    background: linear-gradient(to bottom right, #39B9FF, #003BE4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #003BE4;
+}
+
+#search input{
+    position: absolute;
+    outline: none;
+    border: none;
+    background: none;
+    width: 90%;
+    left: 0;
+    height: 100%;
+    padding: 3%;
+    font-size: 30px;
+    color: rgba(77, 77, 77, 1);;
+}
+
+#selCategorie{
+    position: absolute;
+    background: rgba(250, 250, 250, 0.8);
+    border-radius: 25px;
+    width: 35%;
+    height: max-content;
+    max-height: 40%;
+    overflow-y: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    color: rgba(77, 77, 77, 1);
+    z-index: 1000;
+    transition: all .3s ease-in-out;
+    font-family: DejaVu Sans Mono;
+}
+  #selCategorie span{
+      position: absolute;
+      right: 2%;
+  }
+  #selCategorie h2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 50px;
+    background: white;
+    margin: 0;
+  }
+  .form_radio_btn {
+    position: relative;
+    width: 99%;
+    height: max-content;
+    display: block;
+  }
+  .form_radio_btn *{
+    pointer-events: none;
+  }
+  .form_radio_btn input[type=radio] {
+    display: none;
+  }
+  .form_radio_btn label {
+    position: relative;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+    padding: 0px 15px;
+    border-bottom: 1px solid #999;
+  }
+   
+  /* Checked */
+  .form_radio_btn input[type=radio]:checked + label {
+    background: linear-gradient(to bottom right, #39B9FF, #003BE4);
+    color: white;
+  }
+   
+  /* Hover */
+  .form_radio_btn input[type=radio]:not(:checked) +label:hover {
+    background: linear-gradient(to bottom right, #39B9FF, #003BE4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #003BE4;
+  }
+  .form_radio_btn input[type=radio]:checked{
+    color: white;
+  }
+   
+  /* Disabled */
+  .form_radio_btn input[type=radio]:disabled + label {
+    background: #efefef;
+    color: #666;
+  }
+
+  #selCategorie::-webkit-scrollbar {
+    display: none;
+  }
+  #selCategorie::-webkit-scrollbar-thumb {
+      display: none;
+  }
+  #selCategorie::-webkit-scrollbar-thumb:hover {
+      display: none;
+  }
+
+  @media screen and (max-width: 840px){
+    #selCategorie h2{
+      font-size: 20px;
+      margin: 2px;
+    }
+  }
+  @media screen and (max-width: 500px){
+    #selCategorie h2{
+      font-size: 16px;
+    }
+  }

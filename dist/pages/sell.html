@@ -1,0 +1,31 @@
+<h1><span class="icon-box-add"></span>Настройка объявления:</h1>
+<div id="sell">
+    <div class="protoGood">
+        <div class="goods-card">
+            <img src="./svg/nonePhote.svg" alt="" class="goodImg" id="protoImg">
+            <div class="goodFooter">
+                <div class="goodName" id="protoName">Название товара</div>
+                <div class="goodCost" id="protoCost">Цена</div>
+            </div>
+        </div>
+    </div>
+    <div id="createGood">
+        <form id="sellForm" enctype="multipart/form-data">
+            <input type="file" name="file" id="createImg" class="inputfile" accept="image/*"/>
+            <label for="createImg">Выберети файл</label><br>
+            <input name="name" type="text" placeholder="Название" id="createName"><br>
+            <textarea name="descr" id="createDescr" cols="30" rows="10" placeholder="Описание"></textarea><br>
+            <input name="cost" type="number" placeholder="Цена" id="createCost">
+            <select name="categorie" id="categorie">
+                <option value="not indicated" selected>Не указано</option>
+                <option value="clothes" selected>Одежда</option>
+                <option value="toy" selected>Игрушки</option>
+                <option value="Не указано" selected>Не указано</option>
+                <option value="Не указано" selected>Не указано</option>
+                <option value="Не указано" selected>Не указано</option>
+            </select><br>
+    
+            <input type="submit" id="goCreate"/>
+        </form>
+    </div>
+</div>

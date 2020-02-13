@@ -1,0 +1,265 @@
+#userProfile{
+    border-radius: 40px;
+    overflow: hidden;
+}
+#userBlur{
+    position: absolute;
+    width: 100%;
+    height: 20%;
+    background: rgba(255, 255, 255, .5);
+    filter: blur(20px);
+}
+#user{
+    position: absolute;
+    width: 100%;
+    height: 20%;
+    display: flex;
+    align-items: center;
+}
+#avatar{
+    left: 3%;
+    position: absolute;
+    height: 85%;
+    background-clip: padding-box;
+    padding: 5px;
+    overflow: hidden;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom right, #39B9FF, #003BE4);
+    z-index: 11;
+}
+#avatar::before {
+    content: "";
+    display: block;
+    padding-top: 50%; /* С помощью этого padding мы задаем высоту равную ширине блока */
+}
+#avatar img{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    border-radius: 50%;
+}
+.hello{
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    font-size: 15pt;
+    font-family: DejaVu Sans Mono;
+    font-weight: bold;
+    color: rgba(77, 77, 77, 1);
+}
+#user .hello{
+    display: none;
+}
+#info .hello{
+    font-size: 17pt;
+}
+#profileWrapper{
+    width: 100%;
+    right: 0;
+    height: 90%;
+    bottom: 0;
+    position: absolute;
+}
+#profileItems{
+    width: max-content;
+    right: 5%;
+    height: 100%;
+    bottom: 0;
+    position: absolute;
+    text-align: center;
+    font-size: 15pt;
+    font-family: DejaVu Sans Mono;
+    font-weight: bold;
+    color: rgba(77, 77, 77, 1);
+}
+#profileItems br{
+    cursor: default;
+    display: none;
+}
+.profileItem{
+    cursor: pointer;
+    position: relative;
+    height: inherit;
+    width: fit-content;
+    bottom: 0;
+    display: inline-flex;
+    align-items: center;
+    margin: 0 25px;
+    z-index: 10;
+}
+.profileItem.active::after{
+    position: absolute;
+    content: '';
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    border: 45px solid transparent; border-bottom: 45px solid white;
+}
+#info{
+    top: 20%;
+    z-index: 101;
+    position: absolute;
+    width: 100%;
+    height: 67%;
+    bottom: 0;
+    background: white;
+    box-shadow: 2px 0px 13px rgba(0, 0, 0, 0.089);
+}
+#profileFooter{
+    box-shadow: 0 -2px 7px rgba(0, 0, 0, 0.089);
+    position: absolute;
+    width: 100%;
+    height: 13%;
+    z-index: 102;
+    bottom: 0;
+    /* background: linear-gradient(to bottom right, #39B9FF, #003BE4); */
+    background: linear-gradient(160deg, #39B9FF 10%, #003BE4);
+}
+#outBtn{
+    width: max-content;
+    padding: 0 50px;
+    letter-spacing: 3px;
+    height: 55%;
+    border-radius: 70px;
+    border: none;
+    outline: none;
+    background: rgba(229, 229, 227, 0.9);
+    font-family: DejaVu Sans Mono;
+    font-weight: bold;
+    font-size: 20pt;
+    color: rgba(77, 77, 77, 1);
+    z-index: 10;
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+@media screen and (max-width: 1000px){
+    #outBtn{
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@media screen and (min-width: 1500px){
+    #profileItems{
+        font-size: 18pt !important;
+    }
+}
+@media screen and (min-width: 2000px){
+    #profileItems{
+        font-size: 23pt !important;
+    }
+    #userProfile{
+        border-radius: 50px;
+    }
+    #avatar{
+        padding: 8px;
+    }
+    .profileItem.active::after{
+        bottom: -5px;
+        border: 60px solid transparent; border-bottom: 60px solid white;
+    }
+}
+@media screen and (max-width: 1000px){
+    #avatar{
+        padding: 4px;
+    }
+}
+@media screen and (max-width: 1300px){
+    #info{
+        top: 30%;
+        height: 57%;
+    }
+    #user{
+        height: 30%;
+    }
+    #userBlur{
+        height: 30%;
+    }
+    #avatar{
+        top: 2%;
+        height: 65%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    #profileWrapper{
+        height: 40%;
+        bottom: 0;
+    }
+    #profileItems{
+        width: 100%;
+        top: 0;
+        height: 100%;
+        right: 0;
+        font-size: 13pt;
+    }
+    .profileItem.active::after{
+        bottom: -23px;
+        /* border: 45px solid transparent; border-bottom: 45px solid white; */
+    }
+}
+@media screen and (max-width: 1300px) and (max-height: 750px){
+    .profileItem.active::after{
+        bottom: -30px;
+    }
+}
+@media screen and (max-width: 1150px){
+    #profileItems{
+        font-size: 14pt;
+    }
+}
+@media screen and (max-width: 960px){
+    #profileItems{
+        font-size: 11pt;
+    }
+}
+@media screen and (max-width: 800px){
+    #profileItems{
+        font-size: 7pt;
+    }
+}
+@media screen and (max-width: 650px){
+    #userProfile{
+        width: 95%;
+        height: 90%;
+    }
+    #user, #userBlur{
+        height: 20%;
+    }
+    #info{
+        top: 20%;
+        height: 67%;
+    }
+    #profileItems{
+        display: none;
+    }
+    #avatar{
+        transform: none;
+        left: 5%;
+    }
+    #info .hello{
+        display: none;
+    }
+    #user .hello{
+        width: max-content;
+        left: calc(13vh + 10%);
+        position: relative;
+        display: block;
+    }
+}
+@media screen and (max-width: 480px){
+    #user .hello{
+        position: absolute;
+        margin: 0;
+        width: max-content;
+        left: auto;
+        right: 5%;
+        display: block;
+    }
+}

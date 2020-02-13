@@ -1,0 +1,121 @@
+#likes{
+    display: flex;
+    align-self: center;
+    border-radius: 40px;
+    overflow: hidden;
+}
+#likeFooter{
+    position: absolute;
+    width: 100%;
+    height: 13%;
+    bottom: 0;
+    background: linear-gradient(160deg, #39B9FF 10%, #003BE4);
+}
+#likeBlur{
+    position: absolute;
+    width: 100%;
+    height: 17%;
+    background: rgba(255, 255, 255, .5);
+    filter: blur(20px);
+}
+#likeHead h1{
+    margin: 0;
+    position: absolute;
+    /* display: flex;
+    align-self: center; */
+}
+#likeHead{
+    position: absolute;
+    width: 100%;
+    height: 17%;
+    padding-left: 6%;
+    color: rgba(77, 77, 77, 1);
+    font-family: DejaVu Sans Mono, Arial;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+#likeList{
+    top: 17%;
+    z-index: 101;
+    position: absolute;
+    width: 100%;
+    height: 70%;
+    bottom: 0;
+    background: white;
+    box-shadow: 2px 0px 13px rgba(0, 0, 0, 0.089);
+    overflow-y: scroll;
+}
+
+.likeItem{
+    border-radius: 17px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 1%;
+    margin-right: 2%;
+    width: 97%;
+    height: 25%;
+    background: rgba(80, 78, 78, 0.2);
+}
+.likeItem img{
+    left: 1.6%;
+    position: relative;
+    border-radius: 10px;
+    height: 80%;
+}
+
+.likeInfo{
+    position: relative;
+    width: inherit;
+    height: 100%;
+}
+.likeInfo .likeName{
+    text-align: center;
+    position: relative;
+    width: 100%;
+    top: 3%;
+    font-size: 14pt;
+    font-family: DejaVu Sans Mono;
+    font-weight: bold;
+    color: rgba(77, 77, 77, 1);
+    pointer-events: none;
+}
+.likeInfo .likeCost{
+    position: absolute;
+    right: 3%;
+    bottom: 3%;
+    font-size: 17pt;
+    font-family: DejaVu Sans Mono;
+    font-weight: bold;
+    color: rgba(77, 77, 77, 1);
+}
+.likeInfo .likeDesc{
+    margin-top: 5px;
+    position: absolute;
+    width: 90%;
+    right: 5%;
+    display: flex;
+    align-self: center;
+    font-size: 10pt;
+    font-family: DejaVu Sans Mono;
+    font-weight: bold;
+    color: rgba(77, 77, 77, 1);
+    max-height: 28%;
+    overflow-y: scroll;
+}
+.likeDesc::-webkit-scrollbar {
+    display: none;
+}
+
+@media screen and (max-width: 400px){
+    .likeInfo .likeName{
+        text-align: left;
+    }
+}
+@media screen and (max-width: 570px){
+    #likeHead h1{
+        font-size: 23px;
+        text-align: center;
+    }
+}

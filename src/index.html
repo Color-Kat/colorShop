@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Color shop</title>
+</head>
+<body>
+<div id="black"></div>
+<div id="errors"></div>
+<div id="root"> 
+
+    <div id="search"><input type="text" placeholder="search"><span class="icon-search"></span></div>
+    
+    <div id="selCategorie">
+        <h2>Выберите категорию:</h2>
+        <div class="form_radio_btn">
+                <input id="radio-0" type="radio" name="radio" value="1" checked>
+                <label for="radio-0">Ничего не выбрано(</label>
+        </div>
+        <div class="form_radio_btn">
+            <input id="radio-1" type="radio" name="radio" value="1">
+            <label for="radio-1">Radio button 1</label>
+        </div>
+            
+        <div class="form_radio_btn">
+            <input id="radio-2" type="radio" name="radio" value="2">
+            <label for="radio-2">Radio button 2</label>
+        </div>
+            
+        <div class="form_radio_btn">
+            <input id="radio-3" type="radio" name="radio" value="3">
+            <label for="radio-3">Radio button 3</label>
+        </div>
+            
+        <div class="form_radio_btn">
+            <input id="radio-4" type="radio" name="radio" value="4" disabled>
+            <label for="radio-4">Disabled</label>
+        </div>
+    </div>
+    <div id="heightMain">
+        <div id="navigation">
+            <nav class="navEl" id="search-btn"><span class="icon-search"></span></nav>
+            <nav class="navEl" id="cat-btn"><span class="icon-paragraph-left"></span></nav>
+            <nav class="navEl"><span class="icon-sort-amount-desc"></span></nav>
+            <nav class="navEl"><span class="icon-volume-mute2"></span></nav>
+        </div>
+    </div>
+    <header>
+    <!-- LIKE -->
+        <div id="like" class="tab" data-tab="Like">
+            <img src="svg/like.svg" alt="">
+            <h1 class="dinText">Like</h1>
+        </div>
+    <!-- END LIKE -->
+
+    <!-- LOGO -->
+        <div id="logo">
+            <img src="svg/cartLogo.svg" alt="" id="home" class="tab" data-tab="Home">
+            <img src="svg/cart.svg" alt="" id="cart" class="tab" data-tab="Cart">
+        </div>
+        <img src="svg/cartLogo.svg" alt="" id="invisibleFlex">
+    <!-- END LOGO -->
+    
+    <!-- PROFILE -->
+    <div id="profile" class="tab" class="tab" data-tab="Profile">
+        <img src="svg/profile.svg" alt="">
+        <h1 class="dinText">Profile</h1>
+    </div>
+    <!-- END PROFILE -->
+    </header>
+
+    <!-- DYNAMIC -->
+    <main></main>
+    <!-- END DYNAMIC -->
+
+    <footer>
+        <div id="bottom">
+            <img src="svg/bottom.svg" alt="">
+        </div>
+    </footer>
+</div>
+</body>
+</html>

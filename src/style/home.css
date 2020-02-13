@@ -1,0 +1,14 @@
+main #colorSvg{
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+#color{
+    position: absolute;
+    width: 55%;
+    height: 100%;
+    transition: all .3s ease-in-out;
+    display: flex;
+    justify-content: center;
+}

@@ -1,0 +1,90 @@
+#info h1{
+    width: 94%;
+    margin-top: 0;
+    /* text-align: left; */
+    padding-left: 6%;
+    position: absolute;
+    color: rgba(77, 77, 77, 1);
+    font-family: DejaVu Sans Mono, Arial;
+    font-weight: bold;
+    margin-bottom: 5%;
+}
+#info{
+    overflow-y: scroll;
+}
+#ordersList{
+    left: 50%;
+    transform: translateX(-50%);
+    top: 10%;
+    width: 90%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.orderItem{
+    border-radius: 17px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    width: 100%;
+    height: 25%;
+    background: rgba(80, 78, 78, 0.2);
+}
+.orderItem img{
+    left: 1.6%;
+    position: relative;
+    border-radius: 10px;
+    height: 80%;
+}
+
+.orderInfo{
+    position: relative;
+    width: inherit;
+    height: 100%;
+}
+.orderInfo .orderName{
+    text-align: center;
+    position: relative;
+    width: 100%;
+    top: 3%;
+    font-size: 14pt;
+    font-family: DejaVu Sans Mono;
+    font-weight: bold;
+    color: rgba(77, 77, 77, 1);
+}
+.orderInfo .orderCost{
+    position: absolute;
+    right: 3%;
+    bottom: 3%;
+    font-size: 17pt;
+    font-family: DejaVu Sans Mono;
+    font-weight: bold;
+    color: rgba(77, 77, 77, 1);
+}
+.orderInfo .orderDesc{
+    margin-top: 5px;
+    position: absolute;
+    width: 90%;
+    right: 5%;
+    display: flex;
+    align-self: center;
+    font-size: 10pt;
+    font-family: DejaVu Sans Mono;
+    font-weight: bold;
+    color: rgba(77, 77, 77, 1);
+    max-height: 50%;
+    overflow-y: scroll;
+}
+.orderDesc::-webkit-scrollbar {
+    display: none;
+}
+
+@media screen and (max-width: 650px){
+    #info h1{
+        text-align: center;
+        padding: 0 !important;
+    }
+}
