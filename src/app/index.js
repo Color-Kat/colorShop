@@ -44,17 +44,15 @@ let action = renderByUrl(); //thisPage
 let prevPage;
 window.onpopstate = function(event) {
     window.el.main.onwheel = null;
-    console.log(event);
+    
     prevPage = event.state;
     if(prevPage != null){
         story = true;
 
-        console.log(prevPage.page_name + '----' +Number.isInteger(parseInt(prevPage.page_name)));
         // if the page is normal
         if(!Number.isInteger(parseInt(prevPage.page_name))){
             // if(prevPage.page_name == 'home' && !window.homeLoaded){home(); action = 'home';}
             if(prevPage.page_name == 'home' && window.homeLoaded){
-                console.log('home is loaded and clickTohome()');
                 action = 'home';
                 clickToHome();
             }else{
@@ -94,6 +92,10 @@ if(!Number.isInteger(action)){
 
 // if home is loaded
 function clickToHome(){
+    // stop work if the home one is open
+    if(window.homeOpening && !window.isBottom)                return false;
+    if((window.homeOpening && !window.isBottom) == undefined) return false;
+
     // home page is visible
     let color = document.querySelector('#color');
     if(color) color.style.visibility = 'visible';
@@ -110,15 +112,12 @@ function clickToHome(){
 
     window.enterToHome = true;
 
-    console.log(window.isBottom);
-
     if (window.isBottom) window.lockScroll = true;
     else window.lockScroll = false;
 
     // if home page is open and clicked on home, then render home
     // если главная открыта и мы кликаем по ней, то открывается главная страница без товаров, и удаляется сессия с запросами
     if(window.homeOpening == true && window.isBottom) {
-        console.log('rendering home');
         render('Home').then(html => {
             home();
             window.el.main.innerHTML = html;

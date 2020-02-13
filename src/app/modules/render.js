@@ -72,7 +72,6 @@ function render(action, addH = true, sessionDel = false) {
 
 window.story = false;
 function historyUp(action, goodOpenning = false) {
-    console.log('up');
     if(!story){
         let state = { 'page_name': action};
         let title = action;
