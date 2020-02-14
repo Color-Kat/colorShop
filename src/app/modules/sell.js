@@ -9,6 +9,8 @@ let name = '',
     image = '',
     adr   = '';
 
+let current_input_number = 1;
+
 export function sell(){
     let goBtn = document.querySelector('#goCreate');
     goBtn.value = randomString('Вперед!','Повесить','Написать', 'Создать', 'Отправить', 'Записать', 'Продать', 'Ок');
@@ -24,7 +26,6 @@ export function sell(){
     document.querySelector('#location').oninput = (e)=>{
         readAdress(e.target.value).then((adresses)=>{
             adresses = adresses['suggestions'];
-            console.log(adresses);
 
             // adresses is empty
             document.querySelector('#adresses').innerHTML = '';
@@ -45,7 +46,10 @@ export function sell(){
 
     // specifications
     document.querySelector('#specifications').onclick = (e)=>{
-        document.querySelector('#specList').innerHTML += '<div class="specItem"><input type="text" placeholder="Характеристика" class="spec"><span class="spec-val">:</span><input type="text" placeholder="Значение" class="specVal"></div>';
+        document.querySelector('#specList').innerHTML += `<div class="specItem"><input name="specs[${current_input_number}][name]" type="text" placeholder="Характеристика" class="spec"><span class="spec-val">:</span><input name="specs[${current_input_number}][value]" type="text" placeholder="Значение" class="specVal"></div>`;
+
+        current_input_number++;
+
         openSpec(e)
     };
         
@@ -68,15 +72,20 @@ export function sell(){
 
     showCategories();
 }
-window.addSpec = ()=>{
+
+let specList = [];
+
+window.addSpec = () => {
     // if the last of the characteristic item is not empty, then add a new item
     let lastSpec = document.querySelector('.specItem:last-child .spec').value;
     let lastSpecVal = document.querySelector('.specItem:last-child .specVal').value;
 
-    if(lastSpec != '' && lastSpecVal != ''){
-        document.querySelector('#specList').innerHTML += '<div class="specItem"><input type="text" placeholder="Характеристика" class="spec"><span class="spec-val">:</span><input type="text" placeholder="Значение" class="specVal"></div>';
+    if (lastSpec != '' && lastSpecVal != ''){
+        document.querySelector('#specList').insertAdjacentHTML('beforeend', `<div class="specItem"><input name="specs[${current_input_number}][name]" type="text" placeholder="Характеристика" class="spec"><span class="spec-val">:</span><input name="specs[${current_input_number}][value]" type="text" placeholder="Значение" class="specVal"></div>`);
+        // specList[]['specName'] = 
+        current_input_number++;
     }else{
-        document.querySelector('#specList').innerHTML += '<div class="specItem" id="deleted">Заполните предыдущие поля</div>';
+        document.querySelector('#specList').insertAdjacentHTML('beforeend', '<div class="specItem" id="deleted">Заполните предыдущие поля</div>');
         setTimeout(() => {
             document.querySelector('#deleted').style.opacity = 0;
         }, 100);
@@ -126,8 +135,10 @@ function readAdress (query){
 
 function hang(e){
     let number = document.querySelector('#numberPhone').value.search('_');
-    if(cost!='' && name!='' && description!='' && image!='' && window.adr != '' && number == -1){
+    // if(cost!='' && name!='' && description!='' && image!='' && window.adr != '' && number == -1){
         document.querySelector('#sellForm').addEventListener('submit', function(e){
+            e.preventDefault();
+
             let bodySell = new FormData(this);
             bodySell.append('action', 'sell');
         
@@ -152,8 +163,8 @@ function hang(e){
                 document.querySelector('#protoImg').setAttribute('src', "./svg/nonePhote.svg");
             });
         });
-    }else
-        e.preventDefault();
+    // }else
+    //     e.preventDefault();
 }
 
 function showCategories(){
