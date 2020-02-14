@@ -277,14 +277,15 @@ function openGood(id, addH = true) {
         return response.text();
     }).then(res => {
         thisSlide = 1;
-        console.log(res);
         res = JSON.parse(res);
-
+        console.log(res);
         // window.isBottom = false;
         window.homeOpening = false;
 
         res['goodName'] = res['goodName'][0].toUpperCase() + res['goodName'].slice(1);
-        res['name'] = res['name'][0].toUpperCase() + res['name'].slice(1);
+        res['name'] = res['name'] ? res['name'][0].toUpperCase() + res['name'].slice(1) : 'Имя не указано';
+        res['surname'] = res['surname'] ? res['surname'] : '';
+        console.log(res['name']);
 
         render('good', false).then(html => {// возвращает html код
             // color is hidden
@@ -312,18 +313,29 @@ function openGood(id, addH = true) {
 
                 // specs list
                 let arrSpecList = res['specList'].split(',');
-                for ( let spec of arrSpecList)
+                if(arrSpecList != '') 
                 {
-                    let arrSpec = spec.split('---');
-                    document.querySelector('#specificationsH').insertAdjacentHTML('afterEnd', `<div class="bborder"><div id="type">${arrSpec[0]}</div><div class="answer">${arrSpec[1]}</div></div>`);
-
+                    for ( let spec of arrSpecList)
+                    {
+                        let arrSpec = spec.split('---');
+                        document.querySelector('#specificationsH').insertAdjacentHTML('afterEnd', `<div class="bborder"><div id="type">${arrSpec[0]}</div><div class="answer">${arrSpec[1]}</div></div>`);
+                    }
                 }
+                // none spec
+                else { document.querySelector('#specificationsH').insertAdjacentHTML('afterEnd', 'не указано'); }
 
+                // added to cart
                 if(add == 'true'){
+                    // added
                     document.querySelector('.in').style.display = 'none';
                     document.querySelector('.out').style.display = 'block';
                 }else if(add == 'false'){
+                    // not added
                     document.querySelector('.in').style.display = 'block';
+                    document.querySelector('.out').style.display = 'none';
+                }else if (add == 'login'){
+                    document.querySelector('.in').style.display = 'block';
+                    document.querySelector('.in').innerHTML = 'Войдите'
                     document.querySelector('.out').style.display = 'none';
                 }
 
@@ -390,6 +402,8 @@ function isAdded (id) {
         if(res != 'login') {
             if(res == false) return 'false';
             else return 'true';
+        }else{
+            return 'login';
         }
         // if login, then do nothing
     });
