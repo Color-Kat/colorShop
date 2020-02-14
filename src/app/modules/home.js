@@ -276,9 +276,9 @@ function openGood(id, addH = true) {
     }).then(response => {
         return response.text();
     }).then(res => {
-        thisSlide = 2;
-        res = JSON.parse(res);
+        thisSlide = 1;
         console.log(res);
+        res = JSON.parse(res);
 
         // window.isBottom = false;
         window.homeOpening = false;
@@ -309,6 +309,15 @@ function openGood(id, addH = true) {
                     location       : res['sellerAdress'],
                     number         : res['sellerNumber']
                 });
+
+                // specs list
+                let arrSpecList = res['specList'].split(',');
+                for ( let spec of arrSpecList)
+                {
+                    let arrSpec = spec.split('---');
+                    document.querySelector('#specificationsH').insertAdjacentHTML('afterEnd', `<div class="bborder"><div id="type">${arrSpec[0]}</div><div class="answer">${arrSpec[1]}</div></div>`);
+
+                }
 
                 if(add == 'true'){
                     document.querySelector('.in').style.display = 'none';
