@@ -165,7 +165,14 @@
         bottom: 0;
         background: linear-gradient(160deg, #39B9FF 10%, #003BE4);
     }
+
+    #footerGood *{
+        cursor: pointer;
+    }
+
+    
     #slide_1 .left{width: 40%;} 
+
     #slide_1 .right{
         width: 60%;
         display: flex;
