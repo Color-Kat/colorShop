@@ -261,6 +261,9 @@ window.addLike = (id, liked, likeElem)=>{
 let thisSlide;
 
 function openGood(id, addH = true) {
+    console.log(window.action);
+    window.action = 'Good';
+
     let openGood = {
         'action'   : 'openGood',
         'openable' : id
@@ -326,7 +329,6 @@ function openGood(id, addH = true) {
                 else { document.querySelector('#specificationsH').insertAdjacentHTML('afterEnd', 'не указано'); }
 
                     // added to cart
-                    console.log();
                 if(add['cart'] == true){
                     // added
                     document.querySelector('.in').style.display = 'none';
@@ -382,7 +384,7 @@ function openGood(id, addH = true) {
                     addToLikeGood(e);
                 }
                 let isLiked = document.querySelector('#toLike').getAttribute('data-goodLike');
-                console.log(isLiked);
+                
                 if(isLiked == 'true')                document.querySelector('#toLike').innerHTML = 'Убрать из избранного';
                 else if (isLiked == 'false') document.querySelector('#toLike').innerHTML = 'Добавить в избранное';
                 
@@ -428,7 +430,6 @@ function isAdded (id) {
     }).then(response => {
         return response.text();
     }).then(res => {
-        console.log(res);
         if(res != 'login') {
             res = JSON.parse(res);
             return res;
@@ -561,7 +562,7 @@ window.addToLikeGood = function (e) {
         if (res == 'login') popup('Войдите в аккаунт', 'login');
         else {
             let addToLike = document.querySelector('#toLike');
-            console.log(act);
+
             if (act == 'addLike') {
                 addToLike.innerHTML = 'Убрать из избранного';
                 addToLike.setAttribute('data-goodLike', 'true');

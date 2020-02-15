@@ -38,7 +38,7 @@ window.homeToLogin = false;
 window.homeLoaded  = false
 
 setBg();
-let action = renderByUrl(); //thisPage
+window.action = renderByUrl(); //thisPage
         // HISTORY START
     //moving throught history
 let prevPage;
@@ -58,7 +58,7 @@ window.onpopstate = function(event) {
             }else{
                 render(prevPage.page_name).then(html => {
                     if(window.thisLogin)   { window.thisLogin = false; window.thisProfile = false; }
-                    if(!window.thisGood)   { document.querySelectorAll('main >:not(#color)').forEach(e=>{ e.remove();});window.el.main.innerHTML += html;}
+                    if(!window.thisGood)   { document.querySelectorAll('main >:not(#color)').forEach(e=>{ e.remove();});window.el.main.innerHTML += html; action = 'Good'}
                     if(window.thisLogin)   { log();     action = 'profile';}
                     if(window.thisProfile) { profile(); action = 'Profile';}
                     if(window.thisLike)    { like();    action = 'Like';}
@@ -164,7 +164,8 @@ btns.forEach(e => {
             action = 'good';
         }
 
-
+console.log(action);
+console.log(e.getAttribute('data-tab'));
         // click to home
         // and home is loaded
         if(e.getAttribute('data-tab') == 'Home' && window.homeLoaded){
