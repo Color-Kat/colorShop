@@ -280,15 +280,36 @@ button:hover{
         display: none;
     }
 }
-@media screen and (max-width: 620){
+@media screen and (max-width: 620px){
     header{
         height: 10%;
     }
+    main{
+        top: 10% !important;
+        height: 90% !important;
+    }
 }
-@media screen and (max-width: 500){
+@media screen and (max-width: 500px){
     #like h1{
         display: none;
     }#profile h1{
         display: none;
+    }
+}
+
+@media screen and (max-width: 900px){
+    *::-webkit-scrollbar {
+        display: none;
+    }
+    *::-webkit-scrollbar-thumb {
+        display: none;
+    }
+    *::-webkit-scrollbar-thumb:hover {
+        display: none;
+    }
+}
+@media screen and (max-width: 720px){
+    .window{
+        width: 90%;
     }
 }

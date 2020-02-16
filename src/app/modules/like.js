@@ -33,7 +33,7 @@ export function like(){
                 let l = likes[like];
                 if(l.del == false){
                     likeList.innerHTML += 
-                        `<div class="likeItem" data-goodLike="${l.id}">
+                        `<div class="likeItem" data-goodLike="${l.id}" onclick="openGood(this.getAttribute('data-goodLike'), true, event)">
                             <img src="./goods/${l.img}" alt="">
                             <div class="likeInfo">
                                 <span data-empty="false" class="icon-cancel-circle canselIcon" onclick="deleteLikeItem(event)"></span>

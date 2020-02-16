@@ -30,7 +30,7 @@ export function cart(){
                 let g = goods[good];
                 if(g.del == false){
                     cartList.innerHTML += 
-                        `<div class="cartItem" data-goodId="${g.id}">
+                        `<div class="cartItem" data-goodId="${g.id}" onclick="openGood(this.getAttribute('data-goodId'), true, event)">
                             <img src="./goods/${g.img}" alt="">
                             <div class="cartInfo">
                                 <span class="icon-cancel-circle canselIcon" onclick="cartHandler(event)"></span>

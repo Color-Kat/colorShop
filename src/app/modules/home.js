@@ -260,8 +260,8 @@ window.addLike = (id, liked, likeElem)=>{
 
 let thisSlide;
 
-function openGood(id, addH = true) {
-    console.log(window.action);
+window.openGood = (id, addH = true, e) => {
+    if(e != undefined) if (e.target.tagName == 'SPAN') return false;
     window.action = 'Good';
 
     let openGood = {
@@ -270,7 +270,7 @@ function openGood(id, addH = true) {
     }
     let bodyGood = new FormData();
     for(let variable in openGood) bodyGood.append(variable, openGood[variable]);
-    // fetch('core/core.php',{
+    
     return fetch(phpPath,{
         method : 'post',
         mode   : 'cors',
@@ -574,4 +574,4 @@ window.addToLikeGood = function (e) {
     });
 }
 
-export {home, goBottom, openGood, wheelFunc}
+export {home, goBottom, wheelFunc}

@@ -56,6 +56,7 @@ window.onpopstate = function(event) {
                 action = 'home';
                 clickToHome();
             }else{
+                window.thisGood = false;
                 render(prevPage.page_name).then(html => {
                     if(window.thisLogin)   { window.thisLogin = false; window.thisProfile = false; }
                     if(!window.thisGood)   { document.querySelectorAll('main >:not(#color)').forEach(e=>{ e.remove();});window.el.main.innerHTML += html; action = 'Good'}
@@ -70,7 +71,7 @@ window.onpopstate = function(event) {
         }
        
         // if the page is goodPage
-        else openGood(prevPage.page_name, false);
+        else window.openGood(prevPage.page_name, false);
     }
 };
         // HISTORY END
@@ -88,7 +89,7 @@ if(!Number.isInteger(action)){
         // SETTING ADD
         // if(window.saveScrollONLOAD) if(action == 'Home') saveScroll();
     });
-}else openGood(action);
+}else window.openGood(action);
 
 // if home is loaded
 function clickToHome(){

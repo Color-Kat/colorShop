@@ -52,13 +52,14 @@ function toggleTab() {
                     for(let order in orders){
                         let ord = orders[order];
                         orderList.innerHTML += 
-                        `<div class="orderItem" data-good="${ord.id}">
+                        `<div class="orderItem" data-good="${ord.id}" onclick="openGood(this.getAttribute('data-good'))">
                             <img src="./goods/${ord.img}" alt="">
                             <div class="orderInfo">
                                 <div class="orderName">${ord.goodName}</div>
                                 <div class="orderDesc">${ord.descr}</div>
                                 <div class="orderCost">${ord.cost}₽</div>
                             </div>
+                            <div class="orderSettins">⋮</div>
                         </div>`;
                     }
                 });

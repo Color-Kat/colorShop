@@ -187,12 +187,14 @@
         width: 30% !important;
         display: flex;
         align-items: center;
+        padding: 0 30px;
     }
         #goodImage_2{
-            width: 84%;
+            position: absolute;
+            width: 90%;
             height: auto;
-            margin: 0 6%;
-            margin-left: 8%;
+            /* margin: 0 6%; */
+            /* margin-left: 8%; */
         }
     .right75{
         width: 75%;
@@ -206,7 +208,7 @@
         overflow-y: scroll;
     }
     #slide_2 .right75{
-        width: 70% !important;
+        width: 70%;
     }
     #slide_2 .right75 > *{
         position: relative;
@@ -287,8 +289,9 @@
     }
 }
 
-/* IN WORKING!!!!! */
+    
 @media screen and (max-width: 1050px){
+    /* IN WORKING!!!!! */
     .miniToTop{
         position: static;
         width: 100% !important;
@@ -300,8 +303,25 @@
         #goodImage{
             position: absolute;
             width: 95%;
-            height: auto !important;
         }
-}
+    /* ^^^^^^^^^^^^ */
+
+    .r75ToTop{
+        top: 50% !important;
+        width: 100% !important;
+    }
+    .leftSlide{
+        position: absolute;
+        top: 0;
+        width: 100% !important;
+        height: 50%;
+        justify-content: center;
+    }
+        .leftSlide *{
+            position: absolute;
+            height: 100% !important;
+            width: auto !important;
+        }
+    }
 
         
