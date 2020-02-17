@@ -193,6 +193,8 @@
             position: absolute;
             width: 90%;
             height: auto;
+            margin-top: 30px;
+            border-radius: 10px;
             /* margin: 0 6%; */
             /* margin-left: 8%; */
         }
@@ -205,8 +207,8 @@
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        overflow-y: scroll;
     }
+    #slide_2{overflow-y: scroll; }
     #slide_2 .right75{
         width: 70%;
     }
@@ -232,7 +234,8 @@
         #slide_2 h2:nth-child(1){
             font-size: 45px;
             margin: 4px;
-            height: 50px;
+            height: max-content;
+            text-align: center;
         }
 
         #slide_2 h3{
@@ -255,6 +258,7 @@
             position: absolute; 
             display: flex;
             flex-wrap: wrap;
+            margin-bottom: 10px;
         }
         .bborder *{ position: relative; width: 35% !important;}
         .bborder .answer{ right: 0; }
@@ -293,22 +297,34 @@
 @media screen and (max-width: 1050px){
     /* IN WORKING!!!!! */
     .miniToTop{
-        position: static;
+        position: absolute;
         width: 100% !important;
         top: 0 !important;
         left: 0 !important;
-        height: auto !important;
+        height: 60% !important;
         background-size:cover;
     }
         #goodImage{
             position: absolute;
-            width: 95%;
+            width: auto !important;
+            height: 100%;
         }
+
+    .miniToBottom{
+        position: absolute;
+        width: 100% !important;
+        top: 60% !important;
+        left: 0 !important;
+    }
+    #slide_1{
+        overflow-y: scroll;
+    }
     /* ^^^^^^^^^^^^ */
 
     .r75ToTop{
-        top: 50% !important;
+        top: calc(50% + 30px) !important;
         width: 100% !important;
+        height: 50%;
     }
     .leftSlide{
         position: absolute;
@@ -317,11 +333,46 @@
         height: 50%;
         justify-content: center;
     }
-        .leftSlide *{
-            position: absolute;
-            height: 100% !important;
-            width: auto !important;
-        }
+    .leftSlide *{
+        position: absolute;
+        max-height: 100% !important;
+        max-width: 100% !important;
     }
+    .to{
+        display: none !important;
+    }
+}
+@media screen and (max-height: 720px){
+    #name{
+        font-size: 25pt;
+    }
+}
+@media screen and (max-height: 650px){
+    #name{
+        font-size: 22pt;
+    }
+    #description{
+        border-radius: 20px !important;
+    }
+    #buy{
+        font-size: 20pt;
+    }
+}
+@media screen and (max-width: 500px){
+    #bottomGood {
+        height: 30%;
+        align-items: none;
+    }
+    #bottomGood .left, #bottomGood .right{
+        height: 50%;
+        width: 100% !important;
+    }
+    #bottomGood .right{
+        bottom: 0;
+    }
+    #bottomGood .left{
+        top: 0;
+    }
+}
 
         

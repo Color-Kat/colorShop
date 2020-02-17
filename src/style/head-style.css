@@ -297,7 +297,7 @@ button:hover{
     }
 }
 
-@media screen and (max-width: 900px){
+@media screen and (max-width: 1050px){
     *::-webkit-scrollbar {
         display: none;
     }
@@ -311,5 +311,8 @@ button:hover{
 @media screen and (max-width: 720px){
     .window{
         width: 90%;
+    }
+    #heightMain {
+        top: 10%;
     }
 }

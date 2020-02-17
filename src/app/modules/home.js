@@ -387,7 +387,10 @@ window.openGood = (id, addH = true, e) => {
                 
                 if(isLiked == 'true')                document.querySelector('#toLike').innerHTML = 'Убрать из избранного';
                 else if (isLiked == 'false') document.querySelector('#toLike').innerHTML = 'Добавить в избранное';
-                
+
+                // let hTopBLock = document.querySelector('#goodImage').naturalHeight;
+                // document.querySelector('.miniToTop').style.height = hTopBLock+' !important';
+                // console.log(hTopBLock);
             })
         });
     });

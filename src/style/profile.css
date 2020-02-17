@@ -263,3 +263,29 @@
         display: block;
     }
 }
+
+@media screen and (max-width: 700px){
+    .item{ height: 30%; }
+    .orderItem{margin: 5px !important;}
+}
+@media screen and (max-width: 550px){
+    /* .item{
+        display: block;
+        height: 40% !important;
+    }
+    .item > img{
+        margin: 1% 0 ;
+        top: 0 !important;
+        position: absolute;
+        height: 48% !important;
+        width: auto !important;
+        border-radius: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .item > div:not(#orderSettings){
+        top: 50%;
+        height: 50% !important;
+        width: 100% !important;
+    } */
+}
