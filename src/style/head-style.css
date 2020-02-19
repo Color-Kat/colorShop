@@ -313,6 +313,9 @@ button:hover{
         width: 90%;
     }
     #heightMain {
-        top: 10%;
+        top: 15%;
     }
+}
+@media screen and (max-width: 620px){
+    #heightMain { top: 10%; }
 }

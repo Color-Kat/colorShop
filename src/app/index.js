@@ -93,6 +93,7 @@ if(!Number.isInteger(action)){
 
 // if home is loaded
 function clickToHome(){
+    console.log(window.homeOpening);
     // stop work if the home one is open
     if(window.homeOpening && !window.isBottom)                return false;
     if((window.homeOpening && !window.isBottom) == undefined) return false;
@@ -164,13 +165,11 @@ btns.forEach(e => {
         }catch {
             action = 'good';
         }
-
-console.log(action);
-console.log(e.getAttribute('data-tab'));
         // click to home
         // and home is loaded
         if(e.getAttribute('data-tab') == 'Home' && window.homeLoaded){
             action = e.getAttribute('data-tab');
+            window.homeOpening = true;
 
             // this page is not 'login' or 'profile'
             if (action != 'Profile'){ window.thisLogin = false; window.thisProfile = false; }
@@ -224,7 +223,9 @@ document.querySelector('#search-btn').onclick = function (){
         document.querySelector('#search').style.cssText = "display:flex;top:-100%;";
         
         setTimeout(() => {
-            document.querySelector('#search').style.cssText = "display:flex;top:17%;";
+            if(window.matchMedia("(max-width: 720px)").matches) 
+                 document.querySelector('#search').style.cssText = "display:flex;top:22%;";
+            else document.querySelector('#search').style.cssText = "display:flex;top:17%;";
         }, 100);
 
         document.querySelector('#search input').focus(); // set cursor to input
@@ -284,6 +285,7 @@ function search(params) {
         }).then(res => {
             render('home').then(html => {
                 window.el.main.innerHTML = html;
+                action = 'Home';
                 if(window.thisHome) home();
 
                 if(document.querySelector('#goods'))document.querySelector('#goods').innerHTML = ''; 
@@ -316,7 +318,9 @@ document.querySelector('#cat-btn').onclick = function () {
 
         
         setTimeout(() => {
-            document.querySelector('#selCategorie').style.cssText = "display:flex;top:17%;";
+            if(window.matchMedia("(max-width: 720px)").matches) 
+                 document.querySelector('#selCategorie').style.cssText = "display:flex;top:22%;";
+            else document.querySelector('#selCategorie').style.cssText = "display:flex;top:17%;";
         }, 100);
 
         // shows all categories
@@ -398,6 +402,7 @@ function searchByCategorie(){
         }).then(res => {
             render('home').then(html => {
                 window.el.main.innerHTML = html;
+                action = 'Home';
                 if(window.thisHome) home();
 
                 if(document.querySelector('#goods'))document.querySelector('#goods').innerHTML = ''; 

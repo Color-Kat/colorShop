@@ -221,10 +221,11 @@
         #slide_2 h2,h3{
             font-family: Roboto bold; /* Имя шрифта */
             font-size: 25px;
-            height: 30px;
+            /* height: 30px; */
             margin: 15px;
             display: flex;
             justify-content: center;
+            text-align: center;
         }
         #slide_2 h2{
             background: linear-gradient(90deg, #39B9FF, #003BE4);
@@ -302,12 +303,11 @@
         top: 0 !important;
         left: 0 !important;
         height: 60% !important;
-        background-size:cover;
+        overflow: hidden;
     }
         #goodImage{
             position: absolute;
-            width: auto !important;
-            height: 100%;
+            object-fit: cover;
         }
 
     .miniToBottom{
@@ -335,8 +335,7 @@
     }
     .leftSlide *{
         position: absolute;
-        max-height: 100% !important;
-        max-width: 100% !important;
+        object-fit: cover;
     }
     .to{
         display: none !important;
@@ -374,5 +373,32 @@
         top: 0;
     }
 }
+@media screen and (max-width: 445px){
+    #goodCard{border-radius: 35px !important;}
+    #location, #number{font-size: 15px;}
+}
+@media screen and (max-width: 340px){
+    #goodCard{border-radius: 30px !important;}
+}
 
+.icon-file-text:before {
+    content: "\e922";
+}
+.foterIcons{display: none}
+@media screen and (max-width: 960px){
+    .foterIcons{display: block}
+    #footerGood h3{display: none;}
+    #footerGood{
+        font-size: 22px;
+        color: white;
+    }
+    #footerGood div:hover{
+        color: black;
+    }
+    #footerGood div[data-goodLike="true"]{color: black;}
+    #footerGood div[data-goodLike="true"]:hover{color: white;}
+}
+@media screen and (max-width: 720px){
+    #goodCard{width: 90% !important;}
+}
         

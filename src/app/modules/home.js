@@ -345,12 +345,12 @@ window.openGood = (id, addH = true, e) => {
                     // added to like
                 if(add['like'] == true){
                     // added
-                    document.querySelector('#toLike').innerHTML = 'Добавить в избранное';
+                    document.querySelector('.toLike').innerHTML = 'Добавить в избранное';
                 }else if(add['like'] == false){
                     // not added
-                    document.querySelector('#toLike').innerHTML = 'Убрать из избранного';
+                    document.querySelector('.toLike').innerHTML = 'Убрать из избранного';
                 }else if (add == 'login'){
-                    document.querySelector('#toLike').innerHTML = 'Войдите';
+                    document.querySelector('.toLike').innerHTML = 'Войдите';
                 }
 
                 let left  = document.querySelector('#toLeft');//left arrow
@@ -372,21 +372,24 @@ window.openGood = (id, addH = true, e) => {
                 if(addH) historyUp(res['id'], true);
 
                         //Bottom button
-                document.querySelector('#details').onclick = () => {
-                    if(thisSlide == 1)       thisSlide = 2;
-                    else if(thisSlide == 2) thisSlide = 1;
-
-                    checkSlide(true);
-                }
+                document.querySelectorAll('.details').forEach(element  => {
+                    element.onclick = () => {
+                        if(thisSlide == 1)       thisSlide = 2;
+                        else if(thisSlide == 2) thisSlide = 1;
+    
+                        checkSlide(true);
+                    }
+                })
 
                         // add to like
-                document.querySelector('#toLike').onclick = (e) => {
-                    addToLikeGood(e);
-                }
-                let isLiked = document.querySelector('#toLike').getAttribute('data-goodLike');
+                document.querySelectorAll('.toLike').forEach(element => {
+                    element.onclick = (e) => { addToLikeGood(e); }
+                });
+
+                let isLiked = document.querySelector('.toLike').getAttribute('data-goodLike');
                 
-                if(isLiked == 'true')                document.querySelector('#toLike').innerHTML = 'Убрать из избранного';
-                else if (isLiked == 'false') document.querySelector('#toLike').innerHTML = 'Добавить в избранное';
+                if(isLiked == 'true')        document.querySelector('.toLike').innerHTML = 'Убрать из избранного';
+                else if (isLiked == 'false') document.querySelector('.toLike').innerHTML = 'Добавить в избранное';
 
                 // let hTopBLock = document.querySelector('#goodImage').naturalHeight;
                 // document.querySelector('.miniToTop').style.height = hTopBLock+' !important';
@@ -539,12 +542,15 @@ window.buy = function (e) {
 }
 
 window.addToLikeGood = function (e) {
-    let goodId = e.target.getAttribute('data-id');
+    let goodId = e.target.getAttribute('data-id') || e.target.parentNode.getAttribute('data-id');
     let act;
 
-    if(e.target.getAttribute('data-goodLike') == 'true') act = 'delLike';
-    else if (e.target.getAttribute('data-goodLike') == 'false') act = 'addLike';
-    else if (e.target.getAttribute('data-goodLike') == 'undefined') {popup('Войдите в аккаунт', 'login');return false;}
+    let isLikeEl = e.target.getAttribute('data-goodLike') || e.target.parentNode.getAttribute('data-goodLike');
+    if(isLikeEl == 'true') act = 'delLike';
+    else if (isLikeEl == 'false') act = 'addLike';
+    else if (isLikeEl == 'undefined') {popup('Войдите в аккаунт', 'login');return false;}
+
+    console.log(act);
 
     let like = {
         'action' : act,
@@ -564,14 +570,16 @@ window.addToLikeGood = function (e) {
     }).then(res => {
         if (res == 'login') popup('Войдите в аккаунт', 'login');
         else {
-            let addToLike = document.querySelector('#toLike');
+            let addToLike = document.querySelectorAll('.toLike');
 
             if (act == 'addLike') {
-                addToLike.innerHTML = 'Убрать из избранного';
-                addToLike.setAttribute('data-goodLike', 'true');
+                addToLike[0].innerHTML = 'Убрать из избранного';
+                addToLike[0].setAttribute('data-goodLike', 'true');
+                addToLike[1].setAttribute('data-goodLike', 'true');
             }else if(act == 'delLike'){
-                addToLike.innerHTML = 'Добавить в избранное';
-                addToLike.setAttribute('data-goodLike', 'false');
+                addToLike[0].innerHTML = 'Добавить в избранное';
+                addToLike[0].setAttribute('data-goodLike', 'false');
+                addToLike[1].setAttribute('data-goodLike', 'false');
             }
         }
     });

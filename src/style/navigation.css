@@ -287,3 +287,14 @@
       font-size: 16px;
     }
   }
+
+  @media screen and (max-width: 720px){
+    #selCategorie, #search{
+      width: 50%;
+    }
+  }
+  @media screen and (max-width: 425px){
+    #selCategorie, #search{
+      width: 70%;
+    }
+  }

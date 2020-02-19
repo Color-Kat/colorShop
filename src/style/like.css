@@ -67,7 +67,7 @@
 
 .likeInfo{
     position: relative;
-    width: inherit;
+    width: 100%;
     height: 100%;
 }
 .likeInfo .likeName{
@@ -108,14 +108,24 @@
     display: none;
 }
 
-@media screen and (max-width: 400px){
-    .likeInfo .likeName{
-        text-align: left;
-    }
-}
 @media screen and (max-width: 570px){
     #likeHead h1{
         font-size: 23px;
         text-align: center;
+    }
+}
+@media screen and (max-width: 625px){
+    .item:not(#orderItem){
+        height: 45% !important;
+    }
+    .item img{
+        max-width: 65%;
+        height: auto !important;
+        border-radius: 7px !important;
+        object-fit: cover;
+        max-height: 90%;
+    }
+    .cartName{
+        pointer-events: none;
     }
 }
