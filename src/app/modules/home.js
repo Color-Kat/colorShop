@@ -1,6 +1,7 @@
-import {renderGoods, render, renderGoodPage, historyUp, sessionDelete} from './render';
-import {popup} from './popup';
-import {phpPath} from './php';
+import { renderGoods, render, renderGoodPage, historyUp, sessionDelete } from './render';
+import { popup } from './popup';
+import { phpPath } from './php';
+import { chatList, openChat } from "./chat.js";
 import * as grid from 'masonry-layout'
 let imagesLoaded = require('imagesloaded');
 
@@ -280,8 +281,10 @@ window.openGood = (id, addH = true, e) => {
         return response.text();
     }).then(res => {
         thisSlide = 1;
+        // console.log(res);
         res = JSON.parse(res);
         console.log(res);
+
         // window.isBottom = false;
         window.homeOpening = false;
 
@@ -297,7 +300,6 @@ window.openGood = (id, addH = true, e) => {
             
                 // is good added?
             isAdded(res['id']).then((add)=>{
-                console.log(add);
                 document.querySelectorAll('main >:not(#color)').forEach(e=>{ e.remove();});
                 // insert var in html code
                 window.el.main.innerHTML += react(html, {
@@ -309,10 +311,12 @@ window.openGood = (id, addH = true, e) => {
                     added          : add['cart'],
                     sellerName     : res['name'],
                     sellerLastName : res['surname'],
+                    sellerId       : res['sellerId'],
                     categorie      : res['categorie'],
                     location       : res['sellerAdress'],
                     number         : res['sellerNumber'],
-                    liked          : add['like']
+                    liked          : add['like'],
+                    buyer          : res['myId']
                 });
 
                 // specs list
@@ -343,15 +347,57 @@ window.openGood = (id, addH = true, e) => {
                     document.querySelector('.out').style.display = 'none';
                 }
                     // added to like
-                if(add['like'] == true){
+                if (add['like'] == true){
                     // added
                     document.querySelector('.toLike').innerHTML = 'Добавить в избранное';
-                }else if(add['like'] == false){
+                }else if (add['like'] == false){
                     // not added
                     document.querySelector('.toLike').innerHTML = 'Убрать из избранного';
                 }else if (add == 'login'){
                     document.querySelector('.toLike').innerHTML = 'Войдите';
                 }
+
+                    // chat inscription
+                let chatInscr = document.querySelector('.write');   //inscription
+                let chatBtns = document.querySelectorAll('.write'); //ALL
+                // coco:21 --> coco
+                res['seller'] = res['seller'].split(':')[0];
+                // coco --> Coco
+                if (res['seller'])
+                    res['seller'] = res['seller'][0].toUpperCase() + res['seller'].slice(1);
+                else res['seller'] = null;
+
+
+                // The seller visited the page
+                if(res['myId'] == res['sellerId']) {
+                    chatInscr.innerText = 'Читать';
+                    chatBtns[0].setAttribute('data-viewer', 'seller');
+                    chatBtns[1].setAttribute('data-viewer', 'seller');
+                }else{
+                    chatBtns[0].setAttribute('data-viewer', 'buyer');
+                    chatBtns[1].setAttribute('data-viewer', 'buyer');
+                }
+
+                    // chat
+                chatBtns.forEach(e => {
+                    e.onclick = () => {
+                            // function responsible for 
+                            // the operation of this page
+                        let viewer = chatBtns[0].getAttribute('data-viewer');
+                        let seller = chatBtns[0].getAttribute('data-seller');
+                        let buyer  = chatBtns[0].getAttribute('data-buyer');
+                        let goodId = chatBtns[0].getAttribute('data-good');
+
+                        // if it opens buyers, then throws it into the chat
+                        if (viewer == 'buyer')
+                            // open by seller, buyer and goodId
+                            openChat(false, buyer, seller, goodId, viewer);
+
+                        // if the seller, then in the chat list
+                        else if (viewer == 'seller')
+                            chatList();
+                    }
+                })
 
                 let left  = document.querySelector('#toLeft');//left arrow
                 let right = document.querySelector('#toRight');//right arrow
@@ -550,8 +596,6 @@ window.addToLikeGood = function (e) {
     else if (isLikeEl == 'false') act = 'addLike';
     else if (isLikeEl == 'undefined') {popup('Войдите в аккаунт', 'login');return false;}
 
-    console.log(act);
-
     let like = {
         'action' : act,
         'liked'  : goodId
@@ -585,4 +629,4 @@ window.addToLikeGood = function (e) {
     });
 }
 
-export {home, goBottom, wheelFunc}
+export {home, goBottom, wheelFunc, react}

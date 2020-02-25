@@ -104,6 +104,12 @@ function renderByUrl(){
     }else if(url.pathname == "/cart"){
         footer.style.display = 'none';//убрать футер
         return 'cart';
+    }else if(Number.isInteger(parseInt(url.pathname.replace("/chats/", "")))){
+        footer.style.display = 'none';//убрать футер
+        return url.pathname;
+    }else if(url.pathname == "/chats"){
+        footer.style.display = 'none';//убрать футер
+        return 'chats';
     }else if(url.pathname.replace(/[0-9]/g, "").trim() == "/"){
         let goodId = url.pathname;
         goodId = parseInt(goodId.match(/\d+/));

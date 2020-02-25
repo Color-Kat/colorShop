@@ -12,6 +12,7 @@ import {phpPath} from './modules/php';
 import {log} from './modules/login';
 import {profile} from './modules/profile';
 import {home} from './modules/home';
+import {openChat} from './modules/chat';
 import {like} from './modules/like';
 import {cart} from './modules/cart';
 import {goBottom, openGood, wheelFunc} from './modules/home';
@@ -51,22 +52,31 @@ window.onpopstate = function(event) {
 
         // if the page is normal
         if(!Number.isInteger(parseInt(prevPage.page_name))){
-            // if(prevPage.page_name == 'home' && !window.homeLoaded){home(); action = 'home';}
-            if(prevPage.page_name == 'home' && window.homeLoaded){
-                action = 'home';
-                clickToHome();
-            }else{
-                window.thisGood = false;
-                render(prevPage.page_name).then(html => {
-                    if(window.thisLogin)   { window.thisLogin = false; window.thisProfile = false; }
-                    if(!window.thisGood)   { document.querySelectorAll('main >:not(#color)').forEach(e=>{ e.remove();});window.el.main.innerHTML += html; action = 'Good'}
-                    if(window.thisLogin)   { log();     action = 'profile';}
-                    if(window.thisProfile) { profile(); action = 'Profile';}
-                    if(window.thisLike)    { like();    action = 'Like';}
-                    if(window.thisCart)    { cart();    action = 'Cart';}    
-                    if(prevPage.page_name == 'home') {home(); action = 'Home';}
-                    window.homeOpening = false;         
-                });
+            // if a simple page is open
+            if (!Number.isInteger(parseInt(prevPage.page_name.replace("chats/", "")))){
+                if(prevPage.page_name == 'home' && window.homeLoaded){
+                    action = 'home';
+                    clickToHome();
+                }else{
+                    window.thisGood = false;
+                    render(prevPage.page_name).then(html => {
+                        if(window.thisLogin)   { window.thisLogin = false; window.thisProfile = false; }
+                        if(!window.thisGood)   { document.querySelectorAll('main >:not(#color)').forEach(e=>{ e.remove();});window.el.main.innerHTML += html; action = 'Good'}
+                        if(window.thisLogin)   { log();     action = 'profile';}
+                        if(window.thisProfile) { profile(); action = 'Profile';}
+                        if(window.thisLike)    { like();    action = 'Like';}
+                        if(window.thisCart)    { cart();    action = 'Cart';}    
+                        if(prevPage.page_name == 'home') {home(); action = 'Home';}
+                        window.homeOpening = false;         
+                    });
+                }
+            }
+            // if chat page is open
+            else {
+                let chatId = parseInt(prevPage.page_name.replace("chats/", ""));
+
+                // open chat by chatId
+                openChat(chatId)
             }
         }
        
@@ -77,23 +87,30 @@ window.onpopstate = function(event) {
         // HISTORY END
  
         // RENDER START
-if(!Number.isInteger(action)){
-    render(action).then(html => {
-        window.el.main.innerHTML = html;
-        if(window.thisLogin) log();
-        if(window.thisProfile) profile();
-        if(action == 'home') home();
-        if(window.thisLike) like();
-        if(window.thisCart) cart();
-    
-        // SETTING ADD
-        // if(window.saveScrollONLOAD) if(action == 'Home') saveScroll();
-    });
+if (!Number.isInteger(action)) {
+    // if a simple page is open
+    if (!Number.isInteger(parseInt(action.replace("/chats/", "")))){
+        render(action).then(html => {
+            window.el.main.innerHTML = html;
+            if(window.thisLogin) log();
+            if(window.thisProfile) profile();
+            if(action == 'home') home();
+            if(window.thisLike) like();
+            if(window.thisCart) cart();
+        });
+    }
+    // if chat page is open
+    else {
+        let chatId = parseInt(action.replace("/chats/", ""));
+
+        // open chat by chatId
+        openChat(chatId)
+
+    }
 }else window.openGood(action);
 
 // if home is loaded
 function clickToHome(){
-    console.log(window.homeOpening);
     // stop work if the home one is open
     if(window.homeOpening && !window.isBottom)                return false;
     if((window.homeOpening && !window.isBottom) == undefined) return false;

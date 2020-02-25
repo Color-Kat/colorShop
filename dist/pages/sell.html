@@ -11,21 +11,33 @@
     </div>
     <div id="createGood">
         <form id="sellForm" enctype="multipart/form-data">
+
             <input type="file" name="file" id="createImg" class="inputfile" accept="image/*"/>
-            <label for="createImg">Выберети файл</label><br>
+            <label for="createImg">Выберете файл</label><br>
+
             <input name="name" type="text" placeholder="Название" id="createName"><br>
+
             <textarea name="descr" id="createDescr" cols="30" rows="10" placeholder="Описание"></textarea><br>
+
             <input name="cost" type="number" placeholder="Цена" id="createCost">
-            <select name="categorie" id="categorie">
-                <option value="not indicated" selected>Не указано</option>
-                <option value="clothes" selected>Одежда</option>
-                <option value="toy" selected>Игрушки</option>
-                <option value="Не указано" selected>Не указано</option>
-                <option value="Не указано" selected>Не указано</option>
-                <option value="Не указано" selected>Не указано</option>
-            </select><br>
+            
+            <select name="categorie" id="categorie"></select><br>
+
+            <input name="location" type="text" placeholder="Ваш адресс" id="location">
+            <div id="adresses"></div><br>
+
+            <input name="number" type="text" placeholder="И ваш телефон" id="numberPhone">
+
+            <div id="specifications">
+                <div id="open">Харктеристики +</div><br>
+                <div id="specList"></div>
+                <div id="addSpec" onclick="addSpec()">+</div>
+            </div>
     
             <input type="submit" id="goCreate"/>
+
         </form>
+<!-- <input type="text" placeholder="Характеристика" class="spec"> <input type="text" placeholder="Значение" class="specVal"> -->
+        
     </div>
 </div>
