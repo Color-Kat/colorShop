@@ -13,6 +13,7 @@ const main = document.querySelector('main');
 function log() {
     registr7 = false;
     reg2Page = false;
+    window.thisLogin = true;
 
     document.querySelector('.reg').onclick = reg;
 

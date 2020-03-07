@@ -1,8 +1,9 @@
-import { phpPath } from './php';
+import { phpPath, websocketPath } from './php';
 import {render, historyUp} from './render';
 import {react} from './home';
 
-function chatList(){
+function chatList(byId = false){
+    console.log(123);
     // action is page name
     window.action = 'Chats';
 
@@ -23,8 +24,11 @@ function chatList(){
         // insert content
         window.el.main.innerHTML += html;
         
-
         // get my chats
+        if (!byId){
+            // full chat list
+            fullChatList();
+        }
     });
 
     // home page is hidden
@@ -37,7 +41,6 @@ function openChat (byId, buyer, seller, goodId, viewer) {
     let currentChat = {};
 
     if (!byId) {
-        console.log('not by Id');
         currentChat = {
             'action' : 'openChat',
             'buyer'  : buyer,
@@ -47,7 +50,6 @@ function openChat (byId, buyer, seller, goodId, viewer) {
     }
     // open by chat id
     else{
-        console.log('byId');
         currentChat = {
             'action' : 'openChatById',
             'chatId'  : byId
@@ -63,18 +65,17 @@ function openChat (byId, buyer, seller, goodId, viewer) {
         credentials: 'include',
         body   : body
     }).then(response => {
-        return response.text();
+        return response.json();
     }).then(chat => {
         console.log(chat);
-        window.action = 'Chat';
+        window.action = 'chat';
 
-        return;
         // insert chat template in html
         render(action, false).then(html => {// возвращает html код
             // color is hidden
             let color = document.querySelector('#color');
             if(color) color.style.visibility = 'hidden';
-                      window.el.main.style.overflowY = 'hidden';
+                    window.el.main.style.overflowY = 'hidden';
             
             // delete everything except home
             document.querySelectorAll('main >:not(#color)').forEach(e=>{ e.remove();});
@@ -82,16 +83,150 @@ function openChat (byId, buyer, seller, goodId, viewer) {
                 // insert html in html code
             window.el.main.innerHTML += html;
 
-            // insert the adress with id into the history
-            let url = 'chats/'+chat['chatId'];
-            window.story = false;
-            historyUp(url);
+            let chatBlock = document.querySelector('#chatList');
 
+            // if chat doesn't exsist
+            if (chat == 'null')
+                chatBlock.innerHTML = 'Нет такого чата';
+            else if (chat == 'belong') 
+                chatBlock.innerHTML = 'Вы не входите в чат';
+            else {
+                 // insert the adress with id into the history
+                if (chat['data']['chatId'] != undefined){
+                    
+                    let url = 'chats/'+chat['data']['chatId'];
 
+                    window.story = false;
+                    historyUp(url);
+                }
+
+                // iterate over all chat elements (by message element), 
+                // since elements 0 refer to 0,
+                // elements 1 relate to elements 1
+                if (chat['message'] != null){
+                    for (let i=0; i<chat['message'].length; i++){
+                        // if me is sender
+                        if (chat['sender'][i] == chat['me']) {
+                            // сustomer notice
+                            chatBlock.innerHTML += '<div class="chatItem me">'+chat['message'][i]+'</div>';
+                        }
+                        // seller messege
+                        else{
+                            chatBlock.innerHTML += '<div class="chatItem he">'+chat['message'][i]+'</div>';
+                        }
+                    }
+                }
+
+                // IN WORK
+                // openSocket();
+
+                let messInput = document.querySelector('#myMessage');
+                let sendBtn   = document.querySelector('.sendMessage');
+                let chatList  = document.querySelector('.chatList');
+
+                // websocket connect
+                window.conn = new WebSocket(websocketPath);
+
+                // send only if connected
+                let wsSend = function(data) {
+                    if(!conn.readyState){
+                        setTimeout(function (){
+                            wsSend(data);
+                        },100);
+                    }else{
+                        conn.send(data);
+                    }
+                };
+
+                // if connection is established
+                conn.onopen = function(e) {
+                    console.log("Connection established!");
+                };
+
+                conn.onclose = function(e) {
+                    console.log("Connection is closed");
+                };
+                conn.onerror = function(e) {
+                    console.log("ERROR:" + e.message);
+                };
+
+                // if a message arrived
+                conn.onmessage = function(e) {
+                    let data = JSON.parse(e.data);
+                    console.log(data);
+
+                    // if me is sender
+                    if (data['sender'] == chat['me']) {
+                        // сustomer notice
+                        chatBlock.innerHTML += '<div class="chatItem me">'+data['message']+'</div>';
+                    }
+                    else{
+                        // seller message
+                        chatBlock.innerHTML += '<div class="chatItem he">'+data['message']+'</div>';
+                    }
+                }; 
+
+                sendBtn.onclick = () => {
+                    let websocketDATA = {};
+
+                    let message = messInput.value;
+                    let sender  = chat['me'];
+                    let room    = chat['data']['chatId'];
+
+                    websocketDATA['message'] = message;
+                    websocketDATA['sender']  = sender;
+                    websocketDATA['room']    = room;
+
+                    // send data (websocket)
+                    wsSend(JSON.stringify(websocketDATA));
+
+                    let sendMess = {
+                        'action'   : 'sendMess',
+                        'chatId'   : chat['data']['chatId'],
+                        'sender'   : chat['me'],
+                        'message'  : message
+                    }
+
+                    let bodyMess = new FormData();
+                    for(let variable in sendMess) bodyMess.append(variable, sendMess[variable]);
+                    
+                    fetch(phpPath,{
+                        method : 'post',
+                        mode   : 'cors',
+                        credentials:'include',
+                        body   : bodyMess
+                    }).then(response => {
+                        return response.text();
+                    }).then(res => {
+                        
+                    });   
+                }
+
+                // IN WORK
+            }
         });
     });
+}
 
-    
+function fullChatList() {
+    let chatList = {
+        'action'   : 'chatList'
+    }
+
+    let bodyChatList = new FormData();
+    for(let variable in chatList) bodyChatList.append(variable, chatList[variable]);
+
+    return fetch(phpPath,{
+        method : 'post',
+        mode   : 'cors',
+        credentials:'include',
+        body   : bodyChatList
+    }).then(response => {
+        return response.json();
+    }).then(res => {
+        console.log(res);
+        if (res == 'login') console.log('login');
+    });
 }
 
 export { openChat, chatList }

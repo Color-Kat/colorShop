@@ -20,7 +20,7 @@ function render(action, addH = true, sessionDel = false) {
     if(action != 'profile'){
         // вернуть контент страницы action .html
         if(action == 'prof') action = 'profile';
-        return fetch(`pages/${action}.html`)
+        return fetch(`${thisPath}pages/${action}.html`)
         .then(response => {
             return response.text();
         }).then(html => {
