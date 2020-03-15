@@ -60,15 +60,12 @@ window.onpopstate = function(event) {
                 }else{
                     window.thisGood = false;
                     render(prevPage.page_name).then(html => {
-                        console.log(prevPage.page_name);
-                        if (prevPage.page_name != 'profile'){ window.thisLogin = false; window.thisProfile = false; }
-                        
-                        if(window.thisLogin)   { window.thisProfile = false; }
+                        if(window.thisLogin)   { window.thisLogin = false; window.thisProfile = false; }
                         if(!window.thisGood)   { document.querySelectorAll('main >:not(#color)').forEach(e=>{ e.remove();});window.el.main.innerHTML += html; action = 'Good'}
-                        if(window.thisLogin)   { log();     action = 'profile'; }
-                        if(window.thisProfile) { profile(); action = 'Profile'; }
-                        if(prevPage.page_name == 'like')    { like();    action = 'Like';}
-                        if(prevPage.page_name == 'cart')    { cart();    action = 'Cart';}    
+                        if(window.thisLogin)   { log();     action = 'profile';}
+                        if(window.thisProfile) { profile(); action = 'Profile';}
+                        if(window.thisLike)    { like();    action = 'Like';}
+                        if(window.thisCart)    { cart();    action = 'Cart';}    
                         if(prevPage.page_name == 'home') {home(); action = 'Home';}
                         window.homeOpening = false;         
                     });
@@ -134,7 +131,6 @@ function clickToHome(){
 
     window.enterToHome = true;
 
-    // если страница прокручена, то ставим lock
     if (window.isBottom) window.lockScroll = true;
     else window.lockScroll = false;
 
@@ -168,9 +164,6 @@ function clickToHome(){
     // home is open
     window.homeOpening = true;
 }
-// ^^^^CLICK TO HOME ^^^^
-
-
 
 let btns = document.querySelectorAll('header .tab');
 btns.forEach(e => {
@@ -193,6 +186,7 @@ btns.forEach(e => {
         // and home is loaded
         if(e.getAttribute('data-tab') == 'Home' && window.homeLoaded){
             action = e.getAttribute('data-tab');
+            window.homeOpening = true;
 
             // this page is not 'login' or 'profile'
             if (action != 'Profile'){ window.thisLogin = false; window.thisProfile = false; }
@@ -209,7 +203,7 @@ btns.forEach(e => {
             action = e.getAttribute('data-tab');
             if (action != 'Profile'){ window.thisLogin = false; window.thisProfile = false; }
 
-            window.homeOpening = false;
+            if(action != 'Home') window.homeOpening = false;
 
             render(action).then(html => {
                 window.el.main.innerHTML += html;

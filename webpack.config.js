@@ -8,14 +8,12 @@ module.exports = {
     entry   : './src/app/index.js',
     output  : {
         filename : 'index.js',
-        // path     : path.resolve(__dirname, './dist'),
-        publicPath: '/',
+        path     : path.resolve(__dirname, './dist'),
+        publicPath: '/'
 
-
-        path     : path.resolve('W:/domains/', './dist')
+        // path     : path.resolve('/Users/KatSem/Documents/Zona Downloads/Open Server (Базовый, Расширенный, Максимальный) 5.2.9/OSPanel/domains/', './dist')
     },
     devServer:{
-        publicPath: '/',
         overlay: true,
         historyApiFallback: true
     },
