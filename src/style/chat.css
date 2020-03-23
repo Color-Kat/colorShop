@@ -1,3 +1,163 @@
+@font-face {
+    font-family: 'send';
+    src: url('./fonts/send.eot?62271521');
+    src: url('./fonts/send.eot?62271521#iefix') format('embedded-opentype'),
+         url('./fonts/send.woff2?62271521') format('woff2'),
+         url('./fonts/send.woff?62271521') format('woff'),
+         url('./fonts/send.ttf?62271521') format('truetype'),
+         url('./fonts/send.svg?62271521#send') format('svg');
+    font-weight: normal;
+    font-style: normal;
+  }
+  /* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+  /* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+  /*
+  @media screen and (-webkit-min-device-pixel-ratio:0) {
+    @font-face {
+      font-family: 'send';
+      src: url('../font/send.svg?62271521#send') format('svg');
+    }
+  }
+  */
+   
+   [class^="iconF-"]:before, [class*=" iconF-"]:before {
+    font-family: "send";
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+   
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    margin-right: .2em;
+    text-align: center;
+    /* opacity: .8; */
+   
+    /* For safety - reset parent styles, that can break glyph codes*/
+    font-variant: normal;
+    text-transform: none;
+   
+    /* fix buttons height, for twitter bootstrap */
+    line-height: 1em;
+   
+    /* Animation center compensation - margins should be symmetric */
+    /* remove if not needed */
+    margin-left: .2em;
+   
+    /* you can be more comfortable with increased icons size */
+    /* font-size: 120%; */
+   
+    /* Font smoothing. That was taken from TWBS */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+   
+    /* Uncomment for 3D effect */
+    /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+  }
+   
+  .iconF-paper-plane:before { content: '\f1d8'; }
+
 .chatItem{
-    
+    position: relative;
+    width: 50%;
+    height: max-content;
+    word-wrap: break-word;
+    /* word-break: break-all; */
+    border-radius: 20px;
+    color: white;
+    background: linear-gradient(to bottom right, #39B9FF, #003BE4);
+    margin: 10px;
+    padding: 12px;
+    font-size: 22px;
+    left: calc(50% - 20px);
+    font-family: -apple-system,BlinkMacSystemFont,Roboto,Open Sans,Helvetica Neue,"Noto Sans Armenian","Noto Sans Bengali","Noto Sans Cherokee";
+}
+.he{
+    left: 0;
+    border-bottom-left-radius: 0;
+}
+.me{ border-bottom-right-radius: 0; }
+
+#chatFooter{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .messageInput{
+        position: absolute;
+        width: 95%;
+        height: 70%;
+        border: none;
+        outline: none;
+        border-radius: 10px;
+        font-size: 24px;
+        padding: 10px;
+        color: rgb(44, 44, 44);
+    }
+    .sendMessage{
+        position: absolute;
+        height: 70%;
+        width: 5%;
+        right: 2.5%;
+        background: none;
+        transform: none;
+        border: none;
+        outline: none;
+        font-size: 18px;
+
+        
+
+        color: blue;
+    }
+    .sendMessage:before, .sendMessage:after{
+        transform: none !important;
+        background: none !important;
+    }
+    .sendMessage:hover{
+        border: none !important;
+        transform: scale(1.2, 1.2);
+    }
+
+#infoChat {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+#infoChat img {
+    display: inline;
+    position: relative;
+    height: 80%;
+    border-radius: 15px;
+    right: 30px;
+}
+#infoChat div {
+    display: inline;
+    position: relative;
+    max-width: 20%;
+    word-wrap: wrap;
+    margin-right: 20px;
+    right: 40px;
+}
+
+@media screen and (max-width: 620px){
+    #infoChat img {
+        height: 70% !important;
+        border-radius: 10px;
+    }
+    #infoChat div {
+        font-size: 14px !important;
+    }
+}
+@media screen and (max-width: 320px){
+    #infoChat img {
+        height: 60% !important;
+    }
+    #infoChat div {
+        font-size: 13px !important;
+    }
 }

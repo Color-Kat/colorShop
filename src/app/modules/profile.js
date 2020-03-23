@@ -11,15 +11,20 @@ import { setting } from './setting';
 let thisTab;
 export function profile (){
     qSel('#', 'info');
+    // avatar image
     circle();
     avatar().then((avatar)=>{
         document.querySelector('#avatar').innerHTML = avatar;
     });
+    // avatar is circle
     window.onresize = circle;
     
+    // logout
     document.querySelector('#outBtn').onclick = () => {
         logout();
     }
+
+    // togle tabs
     let tabs = document.querySelectorAll('.profileItem');//вкладки
     // первая вкладка активна
     tabs[0].classList.add('active');
@@ -49,6 +54,9 @@ function toggleTab() {
                 window.el.info.innerHTML = html;
                 let orderList = document.querySelector('#ordersList');
                 renderOrd().then((orders)=>{
+                    document.querySelector('.hello').innerHTML = orders['myName']['name'] +' '+orders['myName']['surname'] 
+                    delete orders["myName"];
+
                     for(let order in orders){
                         let ord = orders[order];
                         orderList.innerHTML += 

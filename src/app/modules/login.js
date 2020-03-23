@@ -13,6 +13,7 @@ const main = document.querySelector('main');
 function log() {
     registr7 = false;
     reg2Page = false;
+    window.thisLogin = true;
 
     document.querySelector('.reg').onclick = reg;
 
@@ -227,6 +228,7 @@ function doLogin(email, epass) {
     }
     let bodyForLogin = new FormData();
     for(let variable in loginPost) bodyForLogin.append(variable, loginPost[variable]);
+    
     fetch(phpPath,{
         method : 'post',
         mode   : 'cors',
@@ -235,7 +237,9 @@ function doLogin(email, epass) {
     }).then(response => {
         return response.text();
     }).then(res => {
-        if(res == 1){
+        console.log(res);
+        
+        if(res){
             render('profile',false).then(html => {
                 window.thisLogin = false;
                 window.thisProfile = true;

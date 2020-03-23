@@ -20,7 +20,7 @@ function render(action, addH = true, sessionDel = false) {
     if(action != 'profile'){
         // вернуть контент страницы action .html
         if(action == 'prof') action = 'profile';
-        return fetch(`pages/${action}.html`)
+        return fetch(`${thisPath}pages/${action}.html`)
         .then(response => {
             return response.text();
         }).then(html => {
@@ -52,7 +52,7 @@ function render(action, addH = true, sessionDel = false) {
         }
         let bodyProfile = new FormData();
         for(let variable in profile) bodyProfile.append(variable, profile[variable]);
-        // fetch('core/core.php',{
+        
         return fetch(phpPath,{
             method : 'post',
             mode   : 'cors',
@@ -61,6 +61,7 @@ function render(action, addH = true, sessionDel = false) {
         }).then(response => {
             return response.text();
         }).then(res => {
+            console.log(res);
             action = res;
             if (action == 'login') window.thisLogin = true;
             else {window.logged = false; window.thisLogin = false;}
@@ -224,6 +225,7 @@ function renderOrd() {
     }).then(response => {
         return response.json();
     }).then(res => {
+        console.log(res);
         return res;
     });
 }
@@ -268,4 +270,8 @@ function renderCart() {
     });
 }
 
-export {render, renderGoods, renderByUrl, historyUp, getUrl, sessionDelete, avatar, renderProfile, renderOrd, renderLike, renderCart}
+
+
+export {render, renderGoods, renderByUrl, historyUp, getUrl,
+        sessionDelete, avatar, renderProfile, renderOrd,
+        renderLike, renderCart}

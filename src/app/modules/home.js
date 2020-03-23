@@ -261,7 +261,7 @@ window.addLike = (id, liked, likeElem)=>{
 
 let thisSlide;
 
-window.openGood = (id, addH = true, e) => {
+window.openGood = (id, e) => {
     if(e != undefined) if (e.target.tagName == 'SPAN') return false;
     window.action = 'Good';
 
@@ -281,7 +281,6 @@ window.openGood = (id, addH = true, e) => {
         return response.text();
     }).then(res => {
         thisSlide = 1;
-        // console.log(res);
         res = JSON.parse(res);
         console.log(res);
 
@@ -415,7 +414,8 @@ window.openGood = (id, addH = true, e) => {
 
                         // ADD TO HISTORY
                 window.story = false;
-                if(addH) historyUp(res['id'], true);
+                // if(addH)
+                    historyUp(res['id'], true);
 
                         //Bottom button
                 document.querySelectorAll('.details').forEach(element  => {
