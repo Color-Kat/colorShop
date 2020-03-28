@@ -1,42 +1,102 @@
 import { phpPath, websocketPath } from './php';
-import { render, historyUp, renderByUrl } from './render';
+import { render, historyUp, getMyId } from './render';
 import { popup } from './popup';
 import { wsSend } from './WS';
 import { react } from './home';
 
-function chatList(byId = false){
-    // action is page name
-    window.action = 'Chats';
+// get my chats
+async function chatList(){ 
+    let chatList = document.querySelector('#chatsList')
 
-    // delete all items except home
-    document.querySelectorAll('main >:not(#color)').forEach(e=>{ e.remove();});
+    // full chat list
+    let chats = await fullChatList();
+    // get pushs
+    let pushs = await getPushs();
+    let myId  = await getMyId();
+    let pushCount;
 
-    // this page isn't good pфпу
-    window.thisGood = false;
-    
-    // this page isn't profile or login
-    window.thisLogin = false;
-    window.thisProfile = false;
+    // objecte to array
+    pushs = Object.entries(pushs);
 
-    // home isn't open
-    window.homeOpening = false;
+    if (pushs != 'empty') {
+        for (let chat of chats){
+            // checks whether an element is even
+            let even = (element) => {
+                return element[0] == myId+chat.chatId;
+            }
 
-    render(action).then(html => {
-        // insert content
-        window.el.main.innerHTML += html;
-        
-        // get my chats
-        if (!byId){
-            // full chat list
-            fullChatList();
+            if (pushs.some(even)) {
+                // get the number of notifications for this chat
+                for (let i in pushs){
+                    if (pushs[i][0] == myId+chat.chatId) 
+                        pushCount = pushs[i][1].length;
+                }
+
+                chatList.innerHTML +=  `<div class="item" data-chatId="${chat.chatId}" onclick="openChat(this.getAttribute('data-chatId'))">
+                    <img src="./goods/${chat.img}" alt="">
+                        <div class="likeInfo">
+                            <span data-empty="false" class="icon-cancel-circle canselIcon" onclick="deleteChat(event)"></span>
+                            <div class="likeName">${chat.goodName+'PUSH'+pushCount}</div>
+                        </div>
+                    </div>`;
+            }else {
+                chatList.innerHTML +=  `<div class="item" data-chatId="${chat.chatId}" onclick="openChat(this.getAttribute('data-chatId'))">
+                    <img src="./goods/${chat.img}" alt="">
+                        <div class="likeInfo">
+                            <span data-empty="false" class="icon-cancel-circle canselIcon" onclick="deleteChat(event)"></span>
+                            <div class="likeName">${chat.goodName}</div>
+                        </div>
+                    </div>`;
+            }
+            
         }
-    });
-
-    // home page is hidden
-    window.el.main.style.overflowY = 'hidden';
+    }else {
+        for (let chat of chats){
+            chatList.innerHTML +=  `<div class="item" data-chatId="${chat.chatId}" onclick="openChat(this.getAttribute('data-chatId'))">
+            <img src="./goods/${chat.img}" alt="">
+                <div class="likeInfo">
+                    <span data-empty="false" class="icon-cancel-circle canselIcon" onclick="deleteChat(event)"></span>
+                    <div class="likeName">${chat.goodName}</div>
+                </div>
+            </div>`;
+        }
+    }
 }
 
-function openChat (byId, buyer, seller, goodId) {
+function fullChatList() {
+    let chatList = {
+        'action'   : 'chatList'
+    }
+
+    let bodyChatList = new FormData();
+    for(let variable in chatList) bodyChatList.append(variable, chatList[variable]);
+
+    return fetch(phpPath,{
+        method : 'post',
+        mode   : 'cors',
+        credentials:'include',
+        body   : bodyChatList
+    }).then(response => {
+        return response.json();
+    }).then(res => {return res;});
+}
+
+function getPushs() {
+    let body = new FormData;
+    body.append('action', 'getPushs');
+    return fetch(phpPath,{
+        method : 'post',
+        mode   : 'cors',
+        credentials: 'include',
+        body   : body
+    }).then(response => {
+        return response.json();
+    }).then(res => {
+        return res;
+    });
+}
+
+window.openChat = function (byId, buyer, seller, goodId) {
     // Chat data to open\create
     // open by buyer, seller, goodId
     let currentChat = {};
@@ -96,9 +156,13 @@ function openChat (byId, buyer, seller, goodId) {
                 document.querySelector('#infoChat div').innerHTML = chat['goodData']['goodName'];
                 document.querySelector('#infoChat img').setAttribute('src', '../goods/'+chat['goodData']['img']);
 
+                conn.onopen = null;
+                conn.onmessage = null;
                 // websocket connect
                 window.conn = new WebSocket(websocketPath);
 
+                // notification handlers doesn't installed
+                window.pushing = false;
                 
                 // useкId = my id + chat id ( 21 + 20 = 2120 ) 
                 let myChatId     = chat['data']['meId'] + chat['data']['chatId'];
@@ -168,24 +232,32 @@ function openChat (byId, buyer, seller, goodId) {
                     let websocketDATA = {};
 
                     let message = messInput.value;
-                    let sender  = chat['me'];
-                    let room    = chat['data']['chatId'];
 
-                    websocketDATA['message'] = message;
-                    websocketDATA['sender']  = sender;
-                    websocketDATA['room']    = room;
+                    // get user id
+                    // because ratchet does not support sessions
+                    getMyId().then(myId => {
+                        // send data (websocket)
+                        if ( interlocutor != myChatId ) 
+                            // i'm buyer, send message to seller 
+                            wsSend(JSON.stringify({command: "message",
+                                                to: interlocutor,
+                                                from: myChatId,
+                                                message: message,
+                                                sender: 0,
+                                                myId: myId}));
+                        else 
+                            // i'm seler, send message to buyer 
+                            wsSend(JSON.stringify({command: "message",
+                                                to: chat['data']['buyerId'] + chat['data']['chatId'],
+                                                from: myChatId,
+                                                message: message,
+                                                sender: 1,
+                                                myId: myId}));
 
-                    // send data (websocket)
-                    if ( interlocutor != myChatId ) 
-                        // i'm buyer, send message to seller 
-                        wsSend(JSON.stringify({command: "message", to: interlocutor, from: myChatId, message: message}));
-                    else 
-                        // i'm seler, send message to buyer 
-                        wsSend(JSON.stringify({command: "message", to: chat['data']['buyerId'] + chat['data']['chatId'], from: myChatId, message: message}));
-
-                    // display my message on the right
-                    chatBlock.innerHTML += '<div class="chatItem me">'+message+'</div>';
-                    messInput.value = '';
+                        // display my message on the right
+                        chatBlock.innerHTML += '<div class="chatItem me">'+message+'</div>';
+                        messInput.value = '';
+                    })
                 }
 
                 // IN WORK
@@ -194,25 +266,4 @@ function openChat (byId, buyer, seller, goodId) {
     });
 }
 
-function fullChatList() {
-    let chatList = {
-        'action'   : 'chatList'
-    }
-
-    let bodyChatList = new FormData();
-    for(let variable in chatList) bodyChatList.append(variable, chatList[variable]);
-
-    return fetch(phpPath,{
-        method : 'post',
-        mode   : 'cors',
-        credentials:'include',
-        body   : bodyChatList
-    }).then(response => {
-        return response.json();
-    }).then(res => {
-        console.log(res);
-        if (res == 'login') console.log('login');
-    });
-}
-
-export { openChat, chatList }
+export { chatList, getPushs }

@@ -274,6 +274,20 @@ button:hover{
     height: 100%;
 }
 
+#push[data-push="true"]{
+    position: absolute;
+    color: white;
+    width: 20px;
+    height: 20px;
+    background: red;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 20px;
+    right: -10px;
+    top: -10px;
+    font-family: Roboto;
+}
+
 @media screen and (max-width: 840px) and (max-height: 1200px){
     #like h1{
         display: none;
@@ -319,4 +333,10 @@ button:hover{
 }
 @media screen and (max-width: 620px){
     #heightMain { top: 10%; }
+    #push[data-push="true"] { 
+        width: 13px;
+        height: 13px;
+        line-height: 13px;
+        font-size: 11px;
+    }
 }

@@ -3,6 +3,7 @@ import { popup } from './popup';
 import { phpPath } from './php';
 import { chatList, openChat } from "./chat.js";
 import * as grid from 'masonry-layout'
+import { profile } from './profile';
 let imagesLoaded = require('imagesloaded');
 
 const main        = document.querySelector('main'),
@@ -14,7 +15,6 @@ window.enterToHome= true;
 let lockGoods     = false;
 
 function home(){
-    console.log('this is home');
     window.isBottom = false;
 
             // footer
@@ -262,7 +262,7 @@ window.addLike = (id, liked, likeElem)=>{
 let thisSlide;
 
 window.openGood = (id, e) => {
-    if(e != undefined) if (e.target.tagName == 'SPAN') return false;
+    if(e.target != undefined) if (e.target.tagName == 'SPAN') return false;
     window.action = 'Good';
 
     let openGood = {
@@ -393,8 +393,17 @@ window.openGood = (id, e) => {
                             openChat(false, buyer, seller, goodId, viewer);
 
                         // if the seller, then in the chat list
-                        else if (viewer == 'seller')
-                            chatList();
+                        else if (viewer == 'seller'){
+                            render('prof', true).then(html => {
+                                if(color) color.style.visibility = 'hidden';
+                                    window.el.main.style.overflowY = 'hidden';
+
+                                document.querySelectorAll('main >:not(#color)').forEach(e=>{ e.remove();});
+                                window.el.main.innerHTML += html;    
+
+                                profile(true);
+                            });
+                        }
                     }
                 })
 

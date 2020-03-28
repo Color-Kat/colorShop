@@ -8,28 +8,29 @@ import {qSel} from './modules/qSel';
 import {randomString} from './modules/randStr';
 import {phpPath, websocketPath} from './modules/php';
 import {push} from './modules/WS';
+import {getPushs} from './modules/chat';
 
 // Modules
 import {log} from './modules/login';
 import {profile} from './modules/profile';
 import {home} from './modules/home';
-import {openChat} from './modules/chat';
 import {like} from './modules/like';
 import {cart} from './modules/cart';
 import {goBottom, openGood, wheelFunc} from './modules/home';
 
-// import {preloader} from './modules/preloader';
-
+// get recovery title
 let thisTitle = document.title;
+// if the user left the page replace title
 window.onblur = function() {
     thisTitle = document.title;
     document.title = randomString('Вернись!','Ну ты куда?','Мы тебя ждем', 'Вернись', 'Ну ты где?', 'Ушёл(', 'Жду', 'Ждем');
 }
+// recovery title
 window.onfocus = function () {
     document.title = thisTitle;
 }
     
-
+// array with elements
 window.el = {};
 qSel('<', 'main');
 
@@ -39,7 +40,15 @@ window.cartToLogin = false;
 window.homeToLogin = false;
 window.homeLoaded  = false;
 
+    // START NOTIFICATIONS 
+window.pushing = false;
+async function pushFilling(){
+    window.pushs = await getPushs();
+}
+pushFilling();
 push();
+    // END NOTIFICATIONS
+
 setBg();
 window.action = renderByUrl(); //thisPage
         // HISTORY START
@@ -47,6 +56,7 @@ window.action = renderByUrl(); //thisPage
 let prevPage;
 window.onpopstate = function(event) {
     window.el.main.onwheel = null;
+    push();
     
     prevPage = event.state;
     if(prevPage != null){
@@ -81,7 +91,7 @@ window.onpopstate = function(event) {
                 let chatId = parseInt(prevPage.page_name.replace("chats/", ""));
 
                 // open chat by chatId
-                openChat(chatId)
+                window.openChat(chatId)
             }
         }
        
@@ -109,7 +119,7 @@ if (!Number.isInteger(action)) {
         let chatId = parseInt(action.replace("/chats/", ""));
 
         // open chat by chatId
-        openChat(chatId)
+        window.openChat(chatId)
 
     }
 }else window.openGood(action);
@@ -178,6 +188,7 @@ let btns = document.querySelectorAll('header .tab');
 btns.forEach(e => {
     e.onclick = () =>{
         window.el.main.onwheel = null;
+        push();
 
         // if there are these variables, then action = profile
         // to ensure that the user is authorized

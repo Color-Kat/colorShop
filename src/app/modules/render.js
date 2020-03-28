@@ -225,7 +225,6 @@ function renderOrd() {
     }).then(response => {
         return response.json();
     }).then(res => {
-        console.log(res);
         return res;
     });
 }
@@ -270,8 +269,24 @@ function renderCart() {
     });
 }
 
+function getMyId() {
+    let body = new FormData();
+    body.append('action', 'getMyId');
+
+    return fetch(phpPath,{
+        method : 'post',
+        mode   : 'cors',
+        credentials: 'include',
+        body   : body
+    }).then(response => {
+        return response.text();
+    }).then(res => {
+        return res;
+    });
+}
+
 
 
 export {render, renderGoods, renderByUrl, historyUp, getUrl,
         sessionDelete, avatar, renderProfile, renderOrd,
-        renderLike, renderCart}
+        renderLike, renderCart, getMyId}

@@ -6,38 +6,41 @@ let wsSend = function(param) {
         setTimeout(function (){
             wsSend(param);
         },100);
-    }else{
-        // conn.send(data);
-        // let thisRoom = parseInt(renderByUrl().replace("/chats/", ""));
-
-        conn.send(param);
-
-        // conn.send(JSON.stringify({command: "subscribe", channel: "global"}));
-        // conn.send(JSON.stringify({command: "groupchat", message: "hello glob", channel: "global"}));
-        // conn.send(JSON.stringify({command: "message", to: "84", from: chat['meId'], message: "it needs xss protection"}));
-        // conn.send(JSON.stringify({command: "register", userId: 21}));
-    }
+    }else{ conn.send(param); }
 };
 
 function push (){
-
-
-
-    // websocket connect
-    window.conn = new WebSocket(websocketPath);
-
-    conn.onopen = function(e) {
-        console.log("Connection established!");
-    };
-    conn.onmessage = function(e) {
-        console.log('push');
-    }; 
-
-    getMyChats().then(chats => {
-        for (let uid of chats){
-            wsSend(JSON.stringify({ command: "register", userId: uid }));
+    if (!window.pushing) {
+        if (window.conn != undefined) {
+            conn.onopen = null;
+            conn.onmessage = null;
         }
-    });
+
+        // websocket connect
+        window.conn = new WebSocket(websocketPath);
+
+        conn.onopen = function(e) {
+            console.log("Connection established!");
+        };
+        conn.onmessage = function(e) {
+            let mess = JSON.parse(e.data);
+
+            getMyChats().then(chats => {
+                // if i don't send message
+                if ( !chats.some(notMyPush) ) { window.pushHandler(mess) }
+            });
+
+            function notMyPush (arr) { return arr == mess['from']; }
+        }; 
+
+        getMyChats().then(chats => {
+            for (let uid of chats){
+                wsSend(JSON.stringify({ command: "register", userId: uid }));
+            }
+        });
+        // notification handlers installed
+        window.pushing = true;
+    }
 }
 
 function getMyChats() {
@@ -52,6 +55,45 @@ function getMyChats() {
         return response.json();
     }).then(res => {
         return res;
+    });
+}
+
+window.pushHandler = function (mess) {
+    console.log(window.pushs);
+    if (window.pushs[mess.to] == undefined)
+        window.pushs[mess.to] = [];
+
+    window.pushs[mess.to].push(true);
+
+    console.log(window.pushs);
+
+    let pushs = document.querySelector('#profile #push').innerHTML;
+    parseInt(pushs);
+
+    if(pushs == '') pushs = 0;
+    // new push!!!
+    pushs++;
+
+    document.querySelector('#profile #push').innerText = pushs;
+    document.querySelector('#profile #push').setAttribute('data-push', 'true');
+
+    // save pushs
+    savePushs();
+}
+
+function savePushs() {
+    let param = {
+        'action' : 'savePushs',
+        'pushs'  : JSON.stringify(window.pushs)
+    }
+    let body = new FormData();
+    for(let variable in param) body.append(variable, param[variable]);
+
+    fetch(phpPath,{
+        method : 'post',
+        mode   : 'cors',
+        credentials: 'include',
+        body   : body
     });
 }
 

@@ -5,11 +5,12 @@ import {popup, popupClose} from './popup';
 import { log } from './login';
 import { sell } from './sell';
 import { phpPath } from './php';
-import { setting } from './setting';
+import { chatList } from './chat';
+import { push } from './WS';
 
 // получить innerHtml активной вкладки
 let thisTab;
-export function profile (){
+export function profile (toChat = false){
     qSel('#', 'info');
     // avatar image
     circle();
@@ -29,7 +30,8 @@ export function profile (){
     // первая вкладка активна
     tabs[0].classList.add('active');
     // получить innerHtml активной вкладки
-    thisTab = document.querySelector('.active').getAttribute('data-tab');
+    if ( !toChat ) thisTab = document.querySelector('.active').getAttribute('data-tab');
+    else thisTab = "chats";
     toggleTab();
     
     for (let i=0; i<tabs.length; i++) {
@@ -72,18 +74,22 @@ function toggleTab() {
                     }
                 });
             });
+            // new onmessage for push
+            push();
             break;
         case 'sell':
             render(thisTab, false).then((html)=>{
                 window.el.info.innerHTML = html;
                 sell();
             });
+            // new onmessage for push
+            push();
 
             break;
-        case 'settings':
+        case 'chats': 
             render(thisTab, false).then((html)=>{
                 window.el.info.innerHTML = html;
-                setting();
+                chatList();
             });
 
             break;
@@ -113,8 +119,6 @@ function logout(){
                 document.querySelectorAll('main >:not(#color)').forEach(e=>{ e.remove();});
                 window.el.main.innerHTML += html;
                 log();
-                console.log(window.el.main.onsroll);
-                console.log(window.el.main.onwheel);
             });
         }
     });

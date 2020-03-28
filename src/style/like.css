@@ -47,7 +47,7 @@
     overflow-y: scroll;
 }
 
-.likeItem{
+.likeItem, .item{
     border-radius: 17px;
     position: relative;
     display: flex;
@@ -58,7 +58,7 @@
     height: 25%;
     background: rgba(80, 78, 78, 0.2);
 }
-.likeItem img{
+.item img{
     left: 1.6%;
     position: relative;
     border-radius: 10px;
