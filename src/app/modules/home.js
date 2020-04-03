@@ -1,7 +1,6 @@
-import { renderGoods, render, renderGoodPage, historyUp, sessionDelete } from './render';
+import { renderGoods, render, historyUp } from './render';
 import { popup } from './popup';
 import { phpPath } from './php';
-import { chatList, openChat } from "./chat.js";
 import * as grid from 'masonry-layout'
 import { profile } from './profile';
 let imagesLoaded = require('imagesloaded');
@@ -61,30 +60,32 @@ function home(){
     document.querySelector('#bottom').onclick = goBottom;
 }
 
-function wheelFunc(){
-    main.onwheel = function (e) {
-        if(!window.lockScroll){
-            // scroll bottom
-            if(e.deltaY > 0)    goBottom();
-            window.lockScroll = true;
-        }
-        if(e.deltaY < 0){
-            if(main.scrollTop == 0){
-                render('home').then(html => {
-                    window.el.main.innerHTML = html;
-                    home();
-                    document.title = "Color shop";
-                    footer.style.cssText = 
-                    'height:5%;opacity: 1;z-index:0';
-                    bottom.style.opacity = 1;
+function wheelHandler(e) {
+    if(!window.lockScroll){
+        // scroll bottom
+        if(e.deltaY > 0)    goBottom();
+        window.lockScroll = true;
+    }
+    if(e.deltaY < 0){
+        if(main.scrollTop == 0){
+            render('home').then(html => {
+                window.el.main.innerHTML = html;
+                home();
+                document.title = "Color shop";
+                footer.style.cssText = 
+                'height:5%;opacity: 1;z-index:0';
+                bottom.style.opacity = 1;
 
-                    window.startPos = 0
-                    // window.homeOpening = false;
-                    window.isBottom = false;
-                });
-            }
+                window.startPos = 0
+                // window.homeOpening = false;
+                window.isBottom = false;
+            });
         }
     }
+}
+
+function wheelFunc(){
+    main.addEventListener('wheel', wheelHandler, { passive: true });
 }
 
 function goBottom () {
@@ -121,7 +122,7 @@ function goBottom () {
             color.appendChild(divGoods);  
             
             main.onscroll = () => {
-                if  (main.scrollTop >= main.scrollHeight - main.clientHeight - 30) 
+                if  (main.scrollTop >= main.scrollHeight - main.clientHeight - 300) 
                 {
                     if(lockGoods == false) moreGoods(window.startPos);
                 }
@@ -262,7 +263,7 @@ window.addLike = (id, liked, likeElem)=>{
 let thisSlide;
 
 window.openGood = (id, e) => {
-    if(e.target != undefined) if (e.target.tagName == 'SPAN') return false;
+    if(e != undefined && e != false) if (e.target.tagName == 'SPAN') return false;
     window.action = 'Good';
 
     let openGood = {
@@ -299,6 +300,7 @@ window.openGood = (id, e) => {
             
                 // is good added?
             isAdded(res['id']).then((add)=>{
+                console.log(res['id']);
                 document.querySelectorAll('main >:not(#color)').forEach(e=>{ e.remove();});
                 // insert var in html code
                 window.el.main.innerHTML += react(html, {
@@ -343,6 +345,10 @@ window.openGood = (id, e) => {
                 }else if (add == 'login'){
                     document.querySelector('.in').style.display = 'block';
                     document.querySelector('.in').innerHTML = 'Войдите'
+                    document.querySelector('.out').style.display = 'none';
+                }else if (add['cart'] == 'my'){
+                    document.querySelector('.in').style.display = 'block';
+                    document.querySelector('.in').innerHTML = 'Мой'
                     document.querySelector('.out').style.display = 'none';
                 }
                     // added to like
@@ -491,6 +497,7 @@ function isAdded (id) {
     }).then(response => {
         return response.text();
     }).then(res => {
+        console.log(res);
         if(res != 'login') {
             res = JSON.parse(res);
             return res;
@@ -563,6 +570,7 @@ window.buy = function (e) {
 
     if(e.target.getAttribute('data-added') == 'true') act = 'deleteCartItem';
     else if (e.target.getAttribute('data-added') == 'false') act = 'addToCart';
+    else if (e.target.getAttribute('data-added') == 'my') return;
 
     let cart = {
         'action' : act,
@@ -638,4 +646,4 @@ window.addToLikeGood = function (e) {
     });
 }
 
-export {home, goBottom, wheelFunc, react}
+export {home, goBottom, wheelFunc, react, wheelHandler}

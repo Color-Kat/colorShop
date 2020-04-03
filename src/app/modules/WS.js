@@ -1,7 +1,8 @@
-import { phpPath, websocketPath } from './php';
+import { phpPath, websocketPath, pathToMusic } from './php';
 
 // websocket sending interface
 let wsSend = function(param) {
+    console.log(param);
     if(!conn.readyState){
         setTimeout(function (){
             wsSend(param);
@@ -10,37 +11,57 @@ let wsSend = function(param) {
 };
 
 function push (){
-    if (!window.pushing) {
-        if (window.conn != undefined) {
-            conn.onopen = null;
-            conn.onmessage = null;
+    // websocket connect
+    window.conn = new WebSocket(websocketPath);
+
+    conn.onopen = function(e) { console.log("Connection established!"); };
+    conn.onclose = function(e) { console.log("Connection is closed"); };
+    conn.onerror = function(e) {
+        console.log("ERROR:" + e.message);
+        popup("Временная ошибка: "+e.message);
+    };
+
+    conn.onmessage = function(e) {
+        let mess = JSON.parse(e.data);
+        console.log(mess);
+        
+        // chat is open
+        if (window.currentChat == mess.to) onmessChat(mess);
+        else onmessPush(mess)
+    }; 
+
+    getMyChats().then(chats => {
+        for (let uid of chats){
+            wsSend(JSON.stringify({ command: "register", userId: uid }));
         }
+    });
+}
 
-        // websocket connect
-        window.conn = new WebSocket(websocketPath);
+function onmessChat(data) {
+    let chatBlock = document.querySelector('#chatList');
 
-        conn.onopen = function(e) {
-            console.log("Connection established!");
-        };
-        conn.onmessage = function(e) {
-            let mess = JSON.parse(e.data);
-
-            getMyChats().then(chats => {
-                // if i don't send message
-                if ( !chats.some(notMyPush) ) { window.pushHandler(mess) }
-            });
-
-            function notMyPush (arr) { return arr == mess['from']; }
-        }; 
-
-        getMyChats().then(chats => {
-            for (let uid of chats){
-                wsSend(JSON.stringify({ command: "register", userId: uid }));
+    // display a message from my interlocutor
+    chatBlock.innerHTML += '<div class="chatItem he">'+data['message']+'<div class="chatDate">'+data['date']+'</div></div>';
+    
+    // scroll to bottom
+    chatBlock.scrollTop = chatBlock.scrollHeight + 10;
+}
+function onmessPush(mess) {
+    getMyChats().then(chats => {
+        // if i don't send message
+        if ( !chats.some(notMyPush) ) {
+            window.pushHandler(mess);
+            
+            if (window.notificationSound == 'true') {
+                let audio = new Audio();
+                audio.preload = 'auto';
+                audio.src = pathToMusic + 'push.mp3';
+                audio.play();
             }
-        });
-        // notification handlers installed
-        window.pushing = true;
-    }
+        }
+    });
+
+    function notMyPush (arr) { return arr == mess['from']; }
 }
 
 function getMyChats() {
@@ -59,23 +80,33 @@ function getMyChats() {
 }
 
 window.pushHandler = function (mess) {
-    console.log(window.pushs);
+    if (window.pushs == 'empty') window.pushs = {};
+
     if (window.pushs[mess.to] == undefined)
         window.pushs[mess.to] = [];
 
     window.pushs[mess.to].push(true);
 
-    console.log(window.pushs);
-
-    let pushs = document.querySelector('#profile #push').innerHTML;
+    let pushs = document.querySelector('#profile .push').innerHTML;
     parseInt(pushs);
 
     if(pushs == '') pushs = 0;
     // new push!!!
     pushs++;
 
-    document.querySelector('#profile #push').innerText = pushs;
-    document.querySelector('#profile #push').setAttribute('data-push', 'true');
+    // notification label
+    if (!window.lockPush){
+        document.querySelectorAll('.profileItem .push, #profile .push').forEach(item => {
+            item.innerText = pushs;
+            item.setAttribute('data-push', 'true');
+        });
+    }
+
+    let notificationСhat = document.querySelector(`.pushItem[data-chatId="${mess.to}"]`);
+    if (notificationСhat != null){
+        notificationСhat.innerHTML = +notificationСhat.innerHTML + 1;
+        notificationСhat.setAttribute('data-push', 'true');
+    }
 
     // save pushs
     savePushs();
@@ -86,6 +117,7 @@ function savePushs() {
         'action' : 'savePushs',
         'pushs'  : JSON.stringify(window.pushs)
     }
+
     let body = new FormData();
     for(let variable in param) body.append(variable, param[variable]);
 
@@ -97,4 +129,4 @@ function savePushs() {
     });
 }
 
-export {wsSend, push}
+export {wsSend, push, savePushs}

@@ -55,6 +55,7 @@
             font-weight: bold;
             line-height: 150%;
             letter-spacing: 2px;
+            color: black;
         }
         #description{
             top: 20%;
@@ -69,6 +70,7 @@
             word-wrap: break-word;
             z-index: 10;
             padding: 20px;
+            color: black;
         }
         #bottomGood{
             width: 100%;
@@ -126,6 +128,7 @@
             word-wrap: normal;
             white-space: nowrap;
             transition: .3s;
+            color: black;
         }
         #footerGood h3:hover{
             transform: scale(1.05);

@@ -47,6 +47,14 @@ export function profile (toChat = false){
             toggleTab();
         } 
     }
+
+    // pushs count in tab
+    let pushCount = document.querySelector('#profile .push').innerHTML;
+    if (pushCount != ''){
+        document.querySelector('.profileItem .push').innerText = pushCount;
+        document.querySelector('.profileItem .push').setAttribute('data-push', 'true');
+    }
+    
 }
 
 function toggleTab() {
@@ -75,7 +83,8 @@ function toggleTab() {
                 });
             });
             // new onmessage for push
-            push();
+            window.currentChat = false;
+            window.lockPush = false;
             break;
         case 'sell':
             render(thisTab, false).then((html)=>{
@@ -83,13 +92,22 @@ function toggleTab() {
                 sell();
             });
             // new onmessage for push
-            push();
+            window.currentChat = false;
+            window.lockPush = false;
 
             break;
         case 'chats': 
             render(thisTab, false).then((html)=>{
                 window.el.info.innerHTML = html;
-                chatList();
+                chatList();    
+                
+                // disable notification label
+                document.querySelectorAll('.profileItem .push, #profile .push').forEach(item => {
+                    item.innerText = '';
+                    item.setAttribute('data-push', 'false');
+                });
+
+                window.lockPush = true;
             });
 
             break;

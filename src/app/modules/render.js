@@ -61,7 +61,6 @@ function render(action, addH = true, sessionDel = false) {
         }).then(response => {
             return response.text();
         }).then(res => {
-            console.log(res);
             action = res;
             if (action == 'login') window.thisLogin = true;
             else {window.logged = false; window.thisLogin = false;}

@@ -148,6 +148,9 @@
     position: absolute;
     right: 10px;
     top: 10px;
+    z-index: 10000000;
+    display: block;
+    color: rgba(77, 77, 77, 1);
 }
 
 .empty{

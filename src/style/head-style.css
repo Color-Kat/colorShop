@@ -274,7 +274,7 @@ button:hover{
     height: 100%;
 }
 
-#push[data-push="true"]{
+.push[data-push="true"], .pushItem[data-push="true"]{
     position: absolute;
     color: white;
     width: 20px;
@@ -282,10 +282,10 @@ button:hover{
     background: red;
     border-radius: 50%;
     text-align: center;
-    line-height: 20px;
+    line-height: 21px;
     right: -10px;
     top: -10px;
-    font-family: Roboto;
+    font-family: Roboto !important;
 }
 
 @media screen and (max-width: 840px) and (max-height: 1200px){

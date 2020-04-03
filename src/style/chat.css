@@ -94,6 +94,7 @@
         font-size: 24px;
         padding: 10px;
         color: rgb(44, 44, 44);
+        padding-right: 60px;
     }
     .sendMessage{
         position: absolute;
@@ -142,6 +143,21 @@
     word-wrap: wrap;
     margin-right: 20px;
     right: 40px;
+}
+.me .chatDate{
+    width: max-content;
+    /* color: rgb(88, 88, 88); */
+    font-size: 12px;
+    position: relative;
+    margin-top: 5px;
+    left: 100%;
+    transform: translateX(-100%);
+}
+.he .chatDate{
+    width: max-content;
+    font-size: 12px;
+    position: relative;
+    margin-top: 5px;
 }
 
 @media screen and (max-width: 620px){

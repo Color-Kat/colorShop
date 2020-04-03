@@ -100,6 +100,13 @@
     z-index: 100;
     border: 45px solid transparent; border-bottom: 45px solid white;
 }
+#profileItems .push[data-push="true"]{
+    font-weight: normal !important;
+    font-size: 12pt !important;
+    position: absolute;
+    margin-top: 50%;
+    transform: translateY(calc(-50% + 6px));
+}
 #info{
     top: 20%;
     z-index: 101;

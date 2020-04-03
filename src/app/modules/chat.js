@@ -1,7 +1,7 @@
 import { phpPath, websocketPath } from './php';
 import { render, historyUp, getMyId } from './render';
 import { popup } from './popup';
-import { wsSend } from './WS';
+import { wsSend, savePushs } from './WS';
 import { react } from './home';
 
 // get my chats
@@ -17,6 +17,7 @@ async function chatList(){
 
     // objecte to array
     pushs = Object.entries(pushs);
+    console.log(chats);
 
     if (pushs != 'empty') {
         for (let chat of chats){
@@ -33,17 +34,19 @@ async function chatList(){
                 }
 
                 chatList.innerHTML +=  `<div class="item" data-chatId="${chat.chatId}" onclick="openChat(this.getAttribute('data-chatId'))">
+                    <div class="pushItem" data-chatId="${myId+chat.chatId}" data-push="true">${pushCount}</div>
                     <img src="./goods/${chat.img}" alt="">
                         <div class="likeInfo">
-                            <span data-empty="false" class="icon-cancel-circle canselIcon" onclick="deleteChat(event)"></span>
-                            <div class="likeName">${chat.goodName+'PUSH'+pushCount}</div>
+                            <span data-empty="false" class="icon-cancel-circle canselIcon" onclick="deleteChat(${chat.chatId})"></span>
+                            <div class="likeName">${chat.goodName}</div>
                         </div>
                     </div>`;
             }else {
                 chatList.innerHTML +=  `<div class="item" data-chatId="${chat.chatId}" onclick="openChat(this.getAttribute('data-chatId'))">
+                <div class="pushItem" data-chatId="${myId+chat.chatId}" data-push="false"></div>
                     <img src="./goods/${chat.img}" alt="">
                         <div class="likeInfo">
-                            <span data-empty="false" class="icon-cancel-circle canselIcon" onclick="deleteChat(event)"></span>
+                            <span data-empty="false" class="icon-cancel-circle canselIcon" onclick="deleteChat(${chat.chatId})"></span>
                             <div class="likeName">${chat.goodName}</div>
                         </div>
                     </div>`;
@@ -53,12 +56,13 @@ async function chatList(){
     }else {
         for (let chat of chats){
             chatList.innerHTML +=  `<div class="item" data-chatId="${chat.chatId}" onclick="openChat(this.getAttribute('data-chatId'))">
-            <img src="./goods/${chat.img}" alt="">
-                <div class="likeInfo">
-                    <span data-empty="false" class="icon-cancel-circle canselIcon" onclick="deleteChat(event)"></span>
-                    <div class="likeName">${chat.goodName}</div>
-                </div>
-            </div>`;
+                <div class="pushItem" data-chatId="${myId+chat.chatId}" data-push="false"></div>
+                <img src="./goods/${chat.img}" alt="">
+                    <div class="likeInfo">
+                        <span data-empty="false" class="icon-cancel-circle canselIcon" onclick="deleteChat(${chat.chatId})"></span>
+                        <div class="likeName">${chat.goodName}</div>
+                    </div>
+                </div>`;
         }
     }
 }
@@ -78,7 +82,10 @@ function fullChatList() {
         body   : bodyChatList
     }).then(response => {
         return response.json();
-    }).then(res => {return res;});
+    }).then(res => {
+        console.log(res);
+        return res;
+    });
 }
 
 function getPushs() {
@@ -148,27 +155,26 @@ window.openChat = function (byId, buyer, seller, goodId) {
 
             // if chat doesn't exsist
             if (chat == 'null')
-                chatBlock.innerHTML = 'Нет такого чата';
+                chatBlock.innerHTML = '<div class="empty">Нет такого чата</div>';
             else if (chat == 'belong') 
-                chatBlock.innerHTML = 'Вы не входите в чат';
+                chatBlock.innerHTML = '<div class="empty">Вы не входите в чат</div>';
+            else if (chat == 'login')
+                chatBlock.innerHTML = '<div class="empty">Войдите</div>';
             else {
                 // good name and good image in chat window
                 document.querySelector('#infoChat div').innerHTML = chat['goodData']['goodName'];
                 document.querySelector('#infoChat img').setAttribute('src', '../goods/'+chat['goodData']['img']);
-
-                conn.onopen = null;
-                conn.onmessage = null;
-                // websocket connect
-                window.conn = new WebSocket(websocketPath);
-
-                // notification handlers doesn't installed
-                window.pushing = false;
                 
-                // useкId = my id + chat id ( 21 + 20 = 2120 ) 
+                // userId = my id + chat id ( 21 + 20 = 2120 ) 
                 let myChatId     = chat['data']['meId'] + chat['data']['chatId'];
                 let interlocutor = chat['data']['sellerId'] + chat['data']['chatId'];
 
-                wsSend(JSON.stringify({ command: "register", userId: myChatId }));
+                // to determine which срфе is open now
+                // messages will be processed only for it
+                window.currentChat = myChatId;
+                // read
+                delete window.pushs[myChatId];
+                savePushs();
 
                 // insert the adress with id into the history
                 if (chat['data']['chatId'] != undefined){
@@ -179,7 +185,6 @@ window.openChat = function (byId, buyer, seller, goodId) {
                     historyUp(url);
                 }
 
-
                 // iterate over all chat elements (by message element), 
                 // since elements 0 refer to 0,
                 // elements 1 relate to elements 1
@@ -188,81 +193,85 @@ window.openChat = function (byId, buyer, seller, goodId) {
                         // if me is sender
                         if (chat['sender'][i] == chat['me']) {
                             // сustomer notice
-                            chatBlock.innerHTML += '<div class="chatItem me">'+chat['message'][i]+'</div>';
+                            chatBlock.innerHTML += '<div class="chatItem me">'+chat['message'][i]+'<div class="chatDate">'+chat['date'][i]+'</div></div>';
                         }
                         // seller messege
                         else{
-                            chatBlock.innerHTML += '<div class="chatItem he">'+chat['message'][i]+'</div>';
+                            chatBlock.innerHTML += '<div class="chatItem he">'+chat['message'][i]+'<div class="chatDate">'+chat['date'][i]+'</div></div>';
                         }
                     }
                 }
-
-                // IN WORK
-                // openSocket();
 
                 let messInput = document.querySelector('#myMessage');
                 let sendBtn   = document.querySelector('.sendMessage');
                 let chatList  = document.querySelector('.chatList');
 
-                // send only if connected
-                
-                // if connection is established
-                conn.onopen = function(e) {
-                    console.log("Connection established!");
-                };
-
-                conn.onclose = function(e) {
-                    console.log("Connection is closed");
-                };
-                conn.onerror = function(e) {
-                    console.log("ERROR:" + e.message);
-                    popup("Временная ошибка: "+e.message);
-                };
-
-                // if a message arrived
-                conn.onmessage = function(e) {
-                    let data = JSON.parse(e.data);
-                    console.log(data);
-                    
-                    // display a message from my interlocutor
-                    chatBlock.innerHTML += '<div class="chatItem he">'+data['message']+'</div>';
-                }; 
-
-                sendBtn.onclick = () => {
-                    let websocketDATA = {};
-
-                    let message = messInput.value;
-
-                    // get user id
-                    // because ratchet does not support sessions
-                    getMyId().then(myId => {
-                        // send data (websocket)
-                        if ( interlocutor != myChatId ) 
-                            // i'm buyer, send message to seller 
-                            wsSend(JSON.stringify({command: "message",
-                                                to: interlocutor,
-                                                from: myChatId,
-                                                message: message,
-                                                sender: 0,
-                                                myId: myId}));
-                        else 
-                            // i'm seler, send message to buyer 
-                            wsSend(JSON.stringify({command: "message",
-                                                to: chat['data']['buyerId'] + chat['data']['chatId'],
-                                                from: myChatId,
-                                                message: message,
-                                                sender: 1,
-                                                myId: myId}));
-
-                        // display my message on the right
-                        chatBlock.innerHTML += '<div class="chatItem me">'+message+'</div>';
-                        messInput.value = '';
-                    })
+                sendBtn.onclick = sender;
+                document.querySelector('#chat').onkeydown = (e)=>{
+                    if(e.keyCode == 13)
+                        //enter
+                        sender();
                 }
 
-                // IN WORK
+                function sender(){
+                    let message = messInput.value;
+                    if (message != '') {
+                        // get user id
+                        // because ratchet does not support sessions
+                        getMyId().then(myId => {
+                            // send data (websocket)
+                            if ( interlocutor != myChatId ) 
+                                // i'm buyer, send message to seller 
+                                wsSend(JSON.stringify({command: "message",
+                                                    to: interlocutor,
+                                                    from: myChatId,
+                                                    message: message,
+                                                    sender: 0,
+                                                    myId: myId}));
+                            else 
+                                // i'm seler, send message to buyer 
+                                wsSend(JSON.stringify({command: "message",
+                                                    to: chat['data']['buyerId'] + chat['data']['chatId'],
+                                                    from: myChatId,
+                                                    message: message,
+                                                    sender: 1,
+                                                    myId: myId}));
+
+                            // display my message on the right
+                            chatBlock.innerHTML += '<div class="chatItem me">'+message+'</div>';
+                            messInput.value = '';
+
+                            // scroll to bottom
+                            chatBlock.scrollTop = chatBlock.scrollHeight + 10;
+                        });
+                    }
+                }
+
+                // scroll to bottom
+                chatBlock.scrollTop = chatBlock.scrollHeight + 10;
             }
         });
+    });
+}
+
+function deleteChat(chatId){
+    let chatList = {
+        'action' : 'deleteChat',
+        'chatId' : chatId
+    }
+    let bodyChatList = new FormData();
+    for(let variable in chatList) bodyChatList.append(variable, chatList[variable]);
+    fetch(phpPath,{
+        method : 'post',
+        mode   : 'cors',
+        credentials:'include',
+        body   : bodyChatList
+    }).then(response => {
+        return response.text();
+    }).then(res => {
+        delete window.pushs[chatId];
+        savePushs();
+        // return res;
     });
 }
 

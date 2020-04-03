@@ -13,7 +13,7 @@ import {getPushs} from './modules/chat';
 // Modules
 import {log} from './modules/login';
 import {profile} from './modules/profile';
-import {home} from './modules/home';
+import {home, wheelHandler} from './modules/home';
 import {like} from './modules/like';
 import {cart} from './modules/cart';
 import {goBottom, openGood, wheelFunc} from './modules/home';
@@ -41,22 +41,75 @@ window.homeToLogin = false;
 window.homeLoaded  = false;
 
     // START NOTIFICATIONS 
-window.pushing = false;
+
+window.currentChat = false;
+window.lockPush = false;
+// toggle sound
+if (localStorage.getItem('soundToggle') != undefined)
+    window.notificationSound = localStorage.getItem('soundToggle');
+setSound();
+
+function setSound() {
+    if (window.notificationSound == 'true') {
+        // on
+        document.querySelector('#soundToggle span').classList.remove('icon-volume-mute2');
+        document.querySelector('#soundToggle span').classList.add('icon-volume-medium');
+    }
+    else if (window.notificationSound == 'false' || window.notificationSound == undefined) {
+        // off
+        window.notificationSound = 'false';
+        document.querySelector('#soundToggle span').classList.remove('icon-volume-medium');
+        document.querySelector('#soundToggle span').classList.add('icon-volume-mute2');
+    }
+}
+document.querySelector('#soundToggle').onclick = () => {
+    if (window.notificationSound == 'false') {
+        // on
+        window.notificationSound = 'true';
+        document.querySelector('#soundToggle span').classList.remove('icon-volume-mute2');
+        document.querySelector('#soundToggle span').classList.add('icon-volume-medium');
+        localStorage.setItem('soundToggle', true);
+    }
+    else if (window.notificationSound == 'true'){
+        // off
+        window.notificationSound = 'false';
+        document.querySelector('#soundToggle span').classList.remove('icon-volume-medium');
+        document.querySelector('#soundToggle span').classList.add('icon-volume-mute2');
+        localStorage.setItem('soundToggle', false);
+    }
+}
+
+// get my pushs
 async function pushFilling(){
     window.pushs = await getPushs();
+
+    document.querySelectorAll('.profileItem .push, #profile .push').forEach(item => {
+        let count = Object.keys(window.pushs).length;
+        if (count > 0 ){
+            item.innerText = count;
+            item.setAttribute('data-push', 'true');
+        }
+    });
 }
 pushFilling();
 push();
     // END NOTIFICATIONS
 
+// random background
 setBg();
+
+// get action by url
 window.action = renderByUrl(); //thisPage
         // HISTORY START
     //moving throught history
 let prevPage;
 window.onpopstate = function(event) {
-    window.el.main.onwheel = null;
-    push();
+    // window.el.main.onwheel = null;
+    window.el.main.removeEventListener('wheel', wheelHandler, { passive: true });
+    
+    // notification
+    window.currentChat = false;
+    window.lockPush = false;
     
     prevPage = event.state;
     if(prevPage != null){
@@ -72,7 +125,6 @@ window.onpopstate = function(event) {
                 }else{
                     window.thisGood = false;
                     render(prevPage.page_name).then(html => {
-                        console.log(prevPage.page_name);
                         if (prevPage.page_name != 'profile'){ window.thisLogin = false; window.thisProfile = false; }
                         
                         if(window.thisLogin)   { window.thisProfile = false; }
@@ -187,8 +239,13 @@ function clickToHome(){
 let btns = document.querySelectorAll('header .tab');
 btns.forEach(e => {
     e.onclick = () =>{
-        window.el.main.onwheel = null;
-        push();
+        // window.el.main.onwheel = null;
+        window.el.main.removeEventListener('wheel', wheelHandler, { passive: true });
+        
+        // notifications
+        window.currentChat = false;
+        window.lockPush = false;
+
 
         // if there are these variables, then action = profile
         // to ensure that the user is authorized
@@ -249,6 +306,7 @@ function searchClose() {
         document.querySelector('#search').style.cssText = "display:none;top:-100%;";
     }, 500);
     searchOpen = false;
+    document.querySelector('#root').onkeydown = null;
 }
 
 document.querySelector('#search-btn').onclick = function (){
@@ -273,8 +331,6 @@ document.querySelector('#search-btn').onclick = function (){
             // #root чтобы не пересикалось с document)
             if(e.keyCode == 13){//enter
                 search();
-
-                document.querySelector('#root').onkeydown = null;
             }
         }
 
