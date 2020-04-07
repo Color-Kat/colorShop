@@ -83,13 +83,15 @@ document.querySelector('#soundToggle').onclick = () => {
 async function pushFilling(){
     window.pushs = await getPushs();
 
-    document.querySelectorAll('.profileItem .push, #profile .push').forEach(item => {
-        let count = Object.keys(window.pushs).length;
-        if (count > 0 ){
-            item.innerText = count;
-            item.setAttribute('data-push', 'true');
-        }
-    });
+    if (window.pushs != 'empty'){
+        document.querySelectorAll('.profileItem .push, #profile .push').forEach(item => {
+            let count = Object.keys(window.pushs).length;
+            if (count > 0 ){
+                item.innerText = count;
+                item.setAttribute('data-push', 'true');
+            }
+        });
+    }
 }
 pushFilling();
 push();
@@ -139,11 +141,11 @@ window.onpopstate = function(event) {
                 }
             }
             // if chat page is open
-            else {
+            else { 
                 let chatId = parseInt(prevPage.page_name.replace("chats/", ""));
 
                 // open chat by chatId
-                window.openChat(chatId)
+                window.openChat(false, chatId);
             }
         }
        
@@ -171,7 +173,7 @@ if (!Number.isInteger(action)) {
         let chatId = parseInt(action.replace("/chats/", ""));
 
         // open chat by chatId
-        window.openChat(chatId)
+        window.openChat(false, chatId);
 
     }
 }else window.openGood(action);

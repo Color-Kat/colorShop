@@ -330,6 +330,9 @@ button:hover{
     #heightMain {
         top: 15%;
     }
+    #search{
+        padding: 15px !important;
+    }
 }
 @media screen and (max-width: 620px){
     #heightMain { top: 10%; }

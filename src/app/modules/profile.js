@@ -106,7 +106,7 @@ function toggleTab() {
                     item.innerText = '';
                     item.setAttribute('data-push', 'false');
                 });
-
+ 
                 window.lockPush = true;
             });
 

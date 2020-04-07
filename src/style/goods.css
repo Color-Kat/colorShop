@@ -89,18 +89,6 @@
     position: absolute;
     bottom: 0;
 }
-/* #goodEmpty{
-    position: absolute;
-    left: 50%;
-    width: 90%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    font-size: 40px;
-    text-align: center;
-    color: rgba(77,77,77);
-    font-family: DejaVu Sans Mono;
-    font-weight: 100;
-} */
 
 @keyframes load {
     from{

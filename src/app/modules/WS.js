@@ -31,6 +31,7 @@ function push (){
     }; 
 
     getMyChats().then(chats => {
+        if (chats == 'login') return;
         for (let uid of chats){
             wsSend(JSON.stringify({ command: "register", userId: uid }));
         }
@@ -48,6 +49,7 @@ function onmessChat(data) {
 }
 function onmessPush(mess) {
     getMyChats().then(chats => {
+        if (chats == 'login') return;
         // if i don't send message
         if ( !chats.some(notMyPush) ) {
             window.pushHandler(mess);
@@ -59,7 +61,7 @@ function onmessPush(mess) {
                 audio.play();
             }
         }
-    });
+    }); 
 
     function notMyPush (arr) { return arr == mess['from']; }
 }

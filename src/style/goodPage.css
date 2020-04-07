@@ -75,7 +75,7 @@
         #bottomGood{
             width: 100%;
             position: absolute;
-            top: 80%;
+            top: 70%;
             height: 20%;
             display: flex;
             align-items: center;
@@ -263,6 +263,7 @@
             display: flex;
             flex-wrap: wrap;
             margin-bottom: 10px;
+            color: black;
         }
         .bborder *{ position: relative; width: 35% !important;}
         .bborder .answer{ right: 0; }

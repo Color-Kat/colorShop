@@ -51,12 +51,17 @@
     font-weight: bold;
     color: rgba(77, 77, 77, 1);
 }
-#user .hello{
-    left: calc(3% + 20px);
+
+#helloUser{
+    /* position: none; */
 }
-#info .hello{
-    font-size: 17pt;
-}
+
+    #user .hello{
+        left: calc(3% + 20px);
+    }
+    #info .hello{
+        font-size: 17pt;
+    }
 #profileWrapper{
     width: 100%;
     right: 0;
@@ -191,12 +196,16 @@
     }
     #avatar{
         position: absolute;
-        top: 2%;
-        height: 65%;
+        top: 10%;
+        height: 55%;
         left: 35%;
         transform: translateX(-50%);
     }
     .hello{
+        position: absolute;  /* подробнее про position: absolute; */
+        top:40%;
+        transform: translateY(-50%);
+        margin: auto;
         width: 30%;
         right: 20% !important;
         left: auto !important;
@@ -243,31 +252,60 @@
         font-size: 12pt;
     }
 }
-@media screen and (max-width: 650px){
+@media screen and (max-width: 620px){
     #userProfile{
         width: 90%;
         height: 80%;
     }
     #user, #userBlur{
-        height: 20%;
+        height: 30%;
+    }
+    #avatar{
+        height: 50% !important;
+        margin-top: 10px;
+        top: 1% !important;
     }
     #info{
-        top: 20%;
-        height: 67%;
+        top: 30%;
+    }
+    #profileWrapper{
+        top: 55%;
+        height: 45% !important;
     }
     #profileItems{
-        display: none;
+        display: block !important;
     }
+    .profileItem{
+        width: 100% !important;
+        height: 30% !important;
+        text-align: left;
+        left: 0 !important;
+        display: flex !important;
+        margin: 0 !important;
+        margin-top: calc(5% / 12) !important;
+        padding-left: 25px;
+        align-self: center;
+    }
+    .profileItem.active::after{
+        position: absolute;
+        content: '';
+        bottom: 0;
+        /* right: -15px; */
+        left: 15px !important;
+        transform: translateX(-50%) rotate(90deg);
+        z-index: 100;
+        border: 15px solid transparent; border-bottom: 15px solid white;
+    }
+
     #avatar{
         transform: none;
         left: 5%;
     }
-    #info .hello{
-        display: none;
-    }
     #user .hello{
         width: max-content;
-        left: calc(13vh + 10%);
+        /* left: calc(13vh + 10%); */
+        right: 10% !important;
+        top: 30% !important;
         position: relative;
         display: block;
     }
@@ -281,11 +319,14 @@
         right: 5%;
         display: block;
     }
+    #info h1{
+        font-size: 25px !important;
+    }
 }
 
 @media screen and (max-width: 700px){
     .item{ height: 30%; }
-    .orderItem{margin: 5px !important;}
+    /* .orderItem{margin: 5px !important;} */
 }
 @media screen and (max-width: 550px){
     /* .item{

@@ -396,7 +396,7 @@ window.openGood = (id, e) => {
                         // if it opens buyers, then throws it into the chat
                         if (viewer == 'buyer')
                             // open by seller, buyer and goodId
-                            openChat(false, buyer, seller, goodId, viewer);
+                            openChat(false, false, buyer, seller, goodId, viewer);
 
                         // if the seller, then in the chat list
                         else if (viewer == 'seller'){

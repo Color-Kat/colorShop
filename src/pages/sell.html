@@ -13,7 +13,7 @@
         <form id="sellForm" enctype="multipart/form-data">
 
             <input type="file" name="file" id="createImg" class="inputfile" accept="image/*"/>
-            <label for="createImg">Выберете файл</label><br>
+            <label for="createImg">Выберите файл</label><br>
 
             <input name="name" type="text" placeholder="Название" id="createName"><br>
 
@@ -21,7 +21,25 @@
 
             <input name="cost" type="number" placeholder="Цена" id="createCost">
             
-            <select name="categorie" id="categorie"></select><br>
+            <!-- <select name="categorie" id="categorie"></select><br> -->
+
+            
+            <div class="select is-active">
+                <div class="select__header">
+                    <span class="select__current">Категория</span>
+                    <div class="select__icon">&times;</div>
+                </div>
+            
+                <div class="select__body">
+                    <!-- <div class="select__item">Value 1</div>
+                    <div class="select__item">Value 2</div>
+                    <div class="select__item">Value 3</div>
+                    <div class="select__item">Value 4</div>
+                    <div class="select__item">Value 5</div> -->
+                </div>
+            </div>
+
+
 
             <input name="location" type="text" placeholder="Ваш адресс" id="location">
             <div id="adresses"></div><br>
@@ -37,7 +55,5 @@
             <input type="submit" id="goCreate"/>
 
         </form>
-<!-- <input type="text" placeholder="Характеристика" class="spec"> <input type="text" placeholder="Значение" class="specVal"> -->
-        
     </div>
 </div>

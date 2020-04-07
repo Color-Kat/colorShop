@@ -52,8 +52,9 @@
     position: relative;
     display: flex;
     align-items: center;
-    margin: 1%;
-    margin-right: 2%;
+    margin: 1% !important;
+    margin-left: 50% !important;
+    transform: translateX(-50%);
     width: 97%;
     height: 25%;
     background: rgba(80, 78, 78, 0.2);
@@ -101,7 +102,7 @@
     font-family: DejaVu Sans Mono;
     font-weight: bold;
     color: rgba(77, 77, 77, 1);
-    max-height: 28%;
+    max-height: 40%;
     overflow-y: scroll;
 }
 .likeDesc::-webkit-scrollbar {
@@ -113,19 +114,33 @@
         font-size: 23px;
         text-align: center;
     }
+    .item .likeDesc, .orderDesc, .cartDesc{
+        top: 30px !important;
+        padding-left: 5px !important;
+    }
 }
 @media screen and (max-width: 625px){
     .item:not(#orderItem){
-        height: 45% !important;
+        height: 35% !important;
     }
     .item img{
         max-width: 65%;
         height: auto !important;
         border-radius: 7px !important;
         object-fit: cover;
-        max-height: 90%;
+        max-height: 87%;
+    }
+    .item{
+        margin-top: 10px !important;
     }
     .cartName{
         pointer-events: none;
+    }
+    .item .likeName, .orderName, .cartName{
+        /* top: 30px !important; */
+        padding-left: 5px !important;
+        width: 77% !important;
+        line-height: 90%;
+        text-overflow: ellipsis;
     }
 }

@@ -57,6 +57,7 @@
    
   .iconF-paper-plane:before { content: '\f1d8'; }
 
+
 .chatItem{
     position: relative;
     width: 50%;
@@ -94,7 +95,7 @@
         font-size: 24px;
         padding: 10px;
         color: rgb(44, 44, 44);
-        padding-right: 60px;
+        padding-right: 45px;
     }
     .sendMessage{
         position: absolute;
@@ -106,9 +107,6 @@
         border: none;
         outline: none;
         font-size: 18px;
-
-        
-
         color: blue;
     }
     .sendMessage:before, .sendMessage:after{
@@ -160,13 +158,20 @@
     margin-top: 5px;
 }
 
-@media screen and (max-width: 620px){
+@media screen and (max-width: 640px){
     #infoChat img {
         height: 70% !important;
         border-radius: 10px;
     }
     #infoChat div {
         font-size: 14px !important;
+    }
+    .messageInput{
+        width: 91% !important;
+        height: 67%;
+    }
+    .sendMessage{
+        right: 15% !important;
     }
 }
 @media screen and (max-width: 320px){
@@ -175,5 +180,28 @@
     }
     #infoChat div {
         font-size: 13px !important;
+    }
+}
+@media screen and (max-width: 1048px){
+    .messageInput{
+        width: 93% !important;
+    }
+    .sendMessage{
+        right: 5% !important;
+        width: 7% !important;
+    }
+}
+@media screen and (max-width: 560px){
+    .messageInput{
+        width: 90% !important;
+    }
+    .sendMessage{
+        right: 7% !important;
+        width: 10% !important;
+    }
+}
+@media screen and (max-width: 420px){
+    .sendMessage{
+        right: 9% !important;
     }
 }

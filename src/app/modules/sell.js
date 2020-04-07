@@ -1,6 +1,7 @@
 import {randomString} from './randStr';
 import {popup} from './popup';
 import {phpPath} from './php';
+import {select} from './select';
 import MaskInput from 'mask-input';
 
 let name = '',
@@ -135,7 +136,7 @@ function readAdress (query){
 
 function hang(e){
     let number = document.querySelector('#numberPhone').value.search('_');
-    // if(cost!='' && name!='' && description!='' && image!='' && window.adr != '' && number == -1){
+    if(cost!='' && name!='' && description!='' && image!='' && window.adr != '' && number == -1){
         document.querySelector('#sellForm').addEventListener('submit', function(e){
             e.preventDefault();
 
@@ -163,8 +164,8 @@ function hang(e){
                 document.querySelector('#protoImg').setAttribute('src', "./svg/nonePhote.svg");
             });
         });
-    // }else
-    //     e.preventDefault();
+    }else
+        e.preventDefault();
 }
 
 function showCategories(){
@@ -182,10 +183,16 @@ function showCategories(){
         return response.text();
     }).then(res => {
         res=JSON.parse(res);
-        let select = document.querySelector('#categorie');
+        let selectEl = document.querySelector('.select__body');
 
         for(let i=0; i<res.length; i++){
-            select.innerHTML += `<option value="${res[i]['cat_name']}" selected>${res[i]['rusName']}</option>`;
+            // select.innerHTML += `<option value="${res[i]['cat_name']}" selected>${res[i]['cat_name']}</option>`;
+            selectEl.innerHTML += `<div class="select__item" data-value="${res[i]['cat_name']}">${res[i]['rusName']}</div>`;
         }
+        select();
+
+        
+        // console.log(body);
+        
     });
 }

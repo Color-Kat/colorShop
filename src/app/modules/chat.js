@@ -33,20 +33,20 @@ async function chatList(){
                         pushCount = pushs[i][1].length;
                 }
 
-                chatList.innerHTML +=  `<div class="item" data-chatId="${chat.chatId}" onclick="openChat(this.getAttribute('data-chatId'))">
+                chatList.innerHTML +=  `<div class="item" data-chatId="${chat.chatId}" onclick="openChat(event, this.getAttribute('data-chatId'))">
                     <div class="pushItem" data-chatId="${myId+chat.chatId}" data-push="true">${pushCount}</div>
                     <img src="./goods/${chat.img}" alt="">
                         <div class="likeInfo">
-                            <span data-empty="false" class="icon-cancel-circle canselIcon" onclick="deleteChat(${chat.chatId})"></span>
+                            <span data-empty="false" class="icon-cancel-circle canselIcon"></span>
                             <div class="likeName">${chat.goodName}</div>
                         </div>
                     </div>`;
             }else {
-                chatList.innerHTML +=  `<div class="item" data-chatId="${chat.chatId}" onclick="openChat(this.getAttribute('data-chatId'))">
+                chatList.innerHTML +=  `<div class="item" data-chatId="${chat.chatId}" onclick="openChat(event, this.getAttribute('data-chatId'))">
                 <div class="pushItem" data-chatId="${myId+chat.chatId}" data-push="false"></div>
                     <img src="./goods/${chat.img}" alt="">
                         <div class="likeInfo">
-                            <span data-empty="false" class="icon-cancel-circle canselIcon" onclick="deleteChat(${chat.chatId})"></span>
+                            <span data-empty="false" class="icon-cancel-circle canselIcon"></span>
                             <div class="likeName">${chat.goodName}</div>
                         </div>
                     </div>`;
@@ -55,11 +55,11 @@ async function chatList(){
         }
     }else {
         for (let chat of chats){
-            chatList.innerHTML +=  `<div class="item" data-chatId="${chat.chatId}" onclick="openChat(this.getAttribute('data-chatId'))">
+            chatList.innerHTML +=  `<div class="item" data-chatId="${chat.chatId}" onclick="openChat(event, this.getAttribute('data-chatId'))">
                 <div class="pushItem" data-chatId="${myId+chat.chatId}" data-push="false"></div>
                 <img src="./goods/${chat.img}" alt="">
                     <div class="likeInfo">
-                        <span data-empty="false" class="icon-cancel-circle canselIcon" onclick="deleteChat(${chat.chatId})"></span>
+                        <span data-empty="false" class="icon-cancel-circle canselIcon"></span>
                         <div class="likeName">${chat.goodName}</div>
                     </div>
                 </div>`;
@@ -103,7 +103,15 @@ function getPushs() {
     });
 }
 
-window.openChat = function (byId, buyer, seller, goodId) {
+window.openChat = function (thisEl, byId, buyer, seller, goodId) {
+    if (thisEl != false) {
+        if (thisEl.target.tagName == 'SPAN'){
+            // console.log('del');
+            deleteChat(byId);
+            return; 
+        }
+    }
+
     // Chat data to open\create
     // open by buyer, seller, goodId
     let currentChat = {};
@@ -271,6 +279,8 @@ function deleteChat(chatId){
     }).then(res => {
         delete window.pushs[chatId];
         savePushs();
+
+        document.querySelector('.item[data-chatId="'+chatId+'"]').remove();
         // return res;
     });
 }
