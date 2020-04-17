@@ -59,6 +59,58 @@
     color: rgba(77, 77, 77, 1);
     z-index: 10;
 }
+
+.sure {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    width: 300px;
+    height: 150px;
+    border-radius: 35px;
+    background: #fff;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity .2s ease-in-out;
+}
+    .sure .sureText{
+        position: absolute;
+        width: 100%;
+        top: 0;
+        height: 70%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: DejaVu Sans Mono;
+        font-weight: bold;
+        font-size: 23px;
+        color: rgba(77, 77, 77, 1);
+    }
+    .sure .surefooter{
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        height: 30%;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        background: linear-gradient(to bottom right, #39B9FF, #003BE4);
+    }
+    .sure button{
+        position: relative;
+        width: 100px;
+        height: 30px;
+        border-radius: 10000px;
+        border: none;
+        outline: none;
+        color: black;
+        font-family: DejaVu Sans Mono;
+        font-weight: bold;
+        color: rgba(77, 77, 77, 1);
+        background: rgba(229, 229, 227, 0.9);
+        font-size: 20px;
+    }
+
 @media screen and (max-width: 1320px){
     .footerPopup{
         justify-content: center;

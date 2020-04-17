@@ -60,15 +60,27 @@
 #createGood input::placeholder,#createGood textarea::placeholder {
     color: white;
 }
-
-.select{
-    border-radius: 35px 35px 0 0 !important;
-    transition: all .2s ease-in-out;
+#createGood textarea{
+    max-width: 70%;
+    min-width: 70%;
+    height: 150px;
+    border-radius: 35px;
+    padding: 15px;
+    
 }
 
-.select.is-active .select__body { display: block; }
+.select{
+    border-radius: 30px 30px 0 0 !important;
+    transition: all .2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    margin-top: 45px;   
+    margin-bottom: 45px;   
+}
+
+.select.is-active .select__body { visibility: visible; }
 .select.is-active { 
-    border-radius: 35px  !important;
+    border-radius: 26px !important;
 }
 
 .select__header {
@@ -92,24 +104,105 @@
 	height: 50px;
 	margin-left: auto;
 	text-align: center;
-	width: 50px;
+    width: 50px;
+    /* animation: selectIcon 4s ease-in-out reverse !important; */
+}
+.select__icon {
+    transform-origin: center;
+	position: relative; /* позиционируем для дочерних блоков */
+	
+ 	transition: .2s; /* скорость поворота */
+	transform-style: preserve-3d; /* стиль трансформирования 3-д */
+	
+	/* для поддержки webkit */
+   	-webkit-transition: .2s;
+  	-webkit-transform-style: preserve-3d;
+  	-webkit-transform: rotateY(0deg);
+	
+	/* для поддержки moz */
+   	-moz-transition: .2s;
+  	-moz-transform-style: preserve-3d;
+      -moz-transform: rotateY(0deg);
+
+}
+
+.select.is-active .select__icon {
+    transform-origin: center;
+    /* общие стили */
+    transform: rotateX(180deg); /* поворачиваем на 180 градусов по горизонтали */
+    /* для поддержки webkit */
+    -webkit-transform: rotateX(180deg);
+    /* для поддержки moz */
+    -moz-transform: rotateX(180deg);
+}
+	
+.select__icon .front {
+    padding-top: 10px;
+    transform-origin: center;
+	/* общие стили */
+	position: absolute; /* абсолютное позиционирование */
+  	width: 100%; /* на всю ширину родительского блока */
+	height: 100%; /* на всю высоту родительского блока */
+	backface-visibility: hidden; /* скрываем контент, который отвернут от пользователя */
+	
+	/* для поддержки webkit */
+	-webkit-backface-visibility: hidden;
+	
+	/* для поддержки moz */
+	-moz-backface-visibility: hidden;
+}
+
+.select__icon .back {
+    padding-top: 10px;
+    transform-origin: center;
+	/* общие стили */
+	position: absolute; /* абсолютное позиционирование */
+  	width: 100%; /* на всю ширину родительского блока */
+	height: 100%; /* на всю высоту родительского блока */
+	backface-visibility: hidden; /* скрываем контент, который отвернут от пользователя */
+	transform: rotateX(180deg); /* отворачиваем задний блок */
+	
+	/* для поддержки webkit */
+	-webkit-backface-visibility: hidden;
+	-webkit-transform: rotateX(180deg);
+
+	/* для поддержки moz */
+  	-moz-backface-visibility: hidden;
+	-moz-transform: rotateX(180deg);
 }
 
 .select__body {
-	display: none;
+    visibility: hidden;
+	display: flex;
 	left: 0;
 	position: relative;
 	right: 0;
     top: 67px;
-    display: flex;
     height: fit-content;
+    flex-wrap: wrap;
+    padding: 8px;
+    padding-top: 0;
+}
+.select__body:before{
+    position: relative;;
+    left: 50%;
+    width: 85%;
+    transform: translateX(-50%);
+    border-top: 3px solid white;
+    content:"";
+    padding-bottom: 8px;
 }
 .select__item {
 	cursor: pointer;
-	font-size: 16px;
-	line-height: 24px;
-    height: 24px;
+	font-size: 20px;
+    line-height: 35px;
+    background: white;
+    border-radius: 7px;
+    margin: 5px;
+    padding: 5px;
+    z-index: 100;
 
+    color: #003BE4;    
 }
 
 .select__item:hover {

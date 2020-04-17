@@ -40,16 +40,35 @@ function push (){
 
 function onmessChat(data) {
     let chatBlock = document.querySelector('#chatList');
+    console.log(data);
 
     // display a message from my interlocutor
-    chatBlock.innerHTML += '<div class="chatItem he">'+data['message']+'<div class="chatDate">'+data['date']+'</div></div>';
+    if (data['message'] != 'readed') {
+        chatBlock.innerHTML += '<div class="chatItem he">'+data['message']+'<div class="chatDate">'+data['date']+'</div></div>';
+
+       
+        // i'm buyer, send message to seller 
+        wsSend(JSON.stringify ({command: "message", 
+                                to: data['from'],
+                                from: data['to'],
+                                message: "readed"}));
+    }else {
+        document.querySelectorAll('.readed[data-readed="false"]').forEach(e=>{
+            e.setAttribute('data-readed', 'true');
+            e.innerHTML = 'прочитанно';
+        });
+    }
     
     // scroll to bottom
     chatBlock.scrollTop = chatBlock.scrollHeight + 10;
+
+    savePushs(true, data['to'], data['sender']);
 }
 function onmessPush(mess) {
     getMyChats().then(chats => {
         if (chats == 'login') return;
+        if(mess['message'] == 'readed') return;
+
         // if i don't send message
         if ( !chats.some(notMyPush) ) {
             window.pushHandler(mess);
@@ -114,10 +133,21 @@ window.pushHandler = function (mess) {
     savePushs();
 }
 
-function savePushs() {
-    let param = {
-        'action' : 'savePushs',
-        'pushs'  : JSON.stringify(window.pushs)
+function savePushs(upStatus = false, id = false, sender = false) {
+    console.log(sender);
+    let param;
+    if (!upStatus) {
+        param = {
+            'action' : 'savePushs',
+            'pushs'  : JSON.stringify(window.pushs)
+        }
+    }else{
+        param = {
+            'action' : 'savePushs',
+            'id'     : id,
+            'sender' : sender,
+            'pushs'  : JSON.stringify(window.pushs)
+        }
     }
 
     let body = new FormData();
@@ -128,6 +158,11 @@ function savePushs() {
         mode   : 'cors',
         credentials: 'include',
         body   : body
+    }).then(response => {
+        return response.text();
+    }).then(res => {
+        console.log(res);
+        // return res;
     });
 }
 

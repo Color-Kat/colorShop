@@ -11,25 +11,30 @@ let select = function () {
     });
 
     function selectToggle() {
+        let body = document.querySelector('.select__body').scrollHeight;
+        
+        if(!this.parentElement.classList.contains('is-active'))
+            this.parentElement.style.height = body+67 + 'px';
+        else    
+            this.parentElement.style.height = '67px';
+
+        
         this.parentElement.classList.toggle('is-active');
 
-        let body = document.querySelector('.select__body').scrollHeight;
-        console.log(body);
-        let active = document.querySelector('.select');
-        
-        active.style.height = body + ' !important';
-        console.log(active);
+        let icon = document.querySelector('.select__icon span');
     }
 
     function selectChoose() {
+        window.categorie = this.getAttribute('data-value');
         let text = this.innerText,
             select = this.closest('.select'),
             currentText = select.querySelector('.select__current');
+        select.style.height = '67px';
         currentText.innerText = text;
-        select.classList.remove('is-active');
-
-        console.log(text);
-
+        
+        setTimeout(() => {
+            select.classList.remove('is-active');
+        }, 200);
     }
 
 };

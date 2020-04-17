@@ -10,9 +10,11 @@ let name = '',
     image = '',
     adr   = '';
 
+window.categorie != ''
+
 let current_input_number = 1;
 
-export function sell(){
+export async function sell(action = false){
     let goBtn = document.querySelector('#goCreate');
     goBtn.value = randomString('Вперед!','Повесить','Написать', 'Создать', 'Отправить', 'Записать', 'Продать', 'Ок');
     // image
@@ -51,10 +53,10 @@ export function sell(){
 
         current_input_number++;
 
-        openSpec(e)
+        window.openSpec(e);
     };
         
-    function openSpec(e){
+    window.openSpec = function (e){
         if(e.target.id != 'open') return false;
         document.querySelector('#specifications').style.height = 'auto';
         
@@ -62,37 +64,51 @@ export function sell(){
         
         document.querySelector('#createGood').scrollTop = document.querySelector('#createGood').scrollHeight
     }
-    function closeSpec(e){
+    window.closeSpec = function (e){
         if(e.target.id != 'open') return false;
         document.querySelector('#specifications').style.height = '40px';
         
         document.querySelector('#specifications').onclick = (e)=>{openSpec(e)};
     }
 
-    goBtn.onclick = hang;
+    await showCategories();
 
-    showCategories();
+    if (action == false) goBtn.onclick = ()=>{hang('new')};
+    else if(action == 'update') goBtn.onclick = ()=>{hang('update')};
 }
 
 let specList = [];
 
-window.addSpec = () => {
-    // if the last of the characteristic item is not empty, then add a new item
-    let lastSpec = document.querySelector('.specItem:last-child .spec').value;
-    let lastSpecVal = document.querySelector('.specItem:last-child .specVal').value;
+window.addSpec = (spec = false, valSpec = false) => {
+    if (spec == false){
+         // if the last of the characteristic item is not empty, then add a new item
+        let lastSpec = document.querySelector('.specItem:last-child .spec').value;
+        let lastSpecVal = document.querySelector('.specItem:last-child .specVal').value;
 
-    if (lastSpec != '' && lastSpecVal != ''){
-        document.querySelector('#specList').insertAdjacentHTML('beforeend', `<div class="specItem"><input name="specs[${current_input_number}][name]" type="text" placeholder="Характеристика" class="spec"><span class="spec-val">:</span><input name="specs[${current_input_number}][value]" type="text" placeholder="Значение" class="specVal"></div>`);
-        // specList[]['specName'] = 
-        current_input_number++;
+        if (lastSpec != '' && lastSpecVal != ''){
+            document.querySelector('#specList').insertAdjacentHTML('beforeend', `<div class="specItem"><input name="specs[${current_input_number}][name]" type="text" placeholder="Характеристика" class="spec"><span class="spec-val">:</span><input name="specs[${current_input_number}][value]" type="text" placeholder="Значение" class="specVal"></div>`);
+
+            current_input_number++;
+        }else{
+            document.querySelector('#specList').insertAdjacentHTML('beforeend', '<div class="specItem" id="deleted">Заполните предыдущие поля</div>');
+            setTimeout(() => {
+                document.querySelector('#deleted').style.opacity = 0;
+            }, 100);
+            setTimeout(() => {
+                document.querySelector('#deleted').remove();
+            }, 2000);
+        }
     }else{
-        document.querySelector('#specList').insertAdjacentHTML('beforeend', '<div class="specItem" id="deleted">Заполните предыдущие поля</div>');
-        setTimeout(() => {
-            document.querySelector('#deleted').style.opacity = 0;
-        }, 100);
-        setTimeout(() => {
-            document.querySelector('#deleted').remove();
-        }, 2000);
+        // inser field
+        document.querySelector('#specList').insertAdjacentHTML('beforeend', `<div class="specItem"><input name="specs[${current_input_number}][name]" type="text" placeholder="Характеристика" class="spec"><span class="spec-val">:</span><input name="specs[${current_input_number}][value]" type="text" placeholder="Значение" class="specVal"></div>`);
+        
+        // insert value
+        let specs = document.querySelector('#specList').childNodes;
+
+        specs[specs.length - 1].querySelector('.spec').value = spec;
+        specs[specs.length - 1].querySelector('.specVal').value = valSpec;
+
+        current_input_number++;
     }
 }
 
@@ -134,14 +150,22 @@ function readAdress (query){
         .catch(console.error);
 }
 
-function hang(e){
+function hang(action, e){
     let number = document.querySelector('#numberPhone').value.search('_');
-    if(cost!='' && name!='' && description!='' && image!='' && window.adr != '' && number == -1){
-        document.querySelector('#sellForm').addEventListener('submit', function(e){
-            e.preventDefault();
+    if(cost!='' && name!='' && description!='' && image!='' && window.adr != '' && number == -1 && window.categorie != ''){
+        document.querySelector('#sellForm').addEventListener('submit', function(event){
+            event.preventDefault();
 
             let bodySell = new FormData(this);
-            bodySell.append('action', 'sell');
+            
+            if(action =='new') bodySell.append('action', 'sell');
+            if(action =='update') bodySell.append('action', 'updateSell');
+
+            bodySell.append('categorie', window.categorie);
+
+            // for(var pair of bodySell.entries()) {
+            //     console.log(pair[0]+ ', '+ pair[1]); 
+            // }
         
             fetch(phpPath,{
                 method : 'post',
@@ -151,21 +175,18 @@ function hang(e){
             }).then(response => {
                 return response.text();
             }).then(res => {
-                console.log(res);
                 if(res == 'type')
                     popup('Тип изображения может быть только jpg(jpeg) или png');
                 else if (res == 'size')
                     popup('Размер не должен превышать 3Мб');
                 if(res == true)
                     this.reset(); // очищаем поля формы 
-
-                e.preventDefault();
+                    
                 // clear protoImg
                 document.querySelector('#protoImg').setAttribute('src', "./svg/nonePhote.svg");
             });
         });
-    }else
-        e.preventDefault();
+    }
 }
 
 function showCategories(){
@@ -175,7 +196,7 @@ function showCategories(){
     let bodyShowCat = new FormData();
     for(let variable in showCat) bodyShowCat.append(variable, showCat[variable]);
    
-    fetch(phpPath,{
+    return fetch(phpPath,{
         method : 'post',
         mode   : 'cors',
         body   : bodyShowCat
@@ -190,9 +211,5 @@ function showCategories(){
             selectEl.innerHTML += `<div class="select__item" data-value="${res[i]['cat_name']}">${res[i]['rusName']}</div>`;
         }
         select();
-
-        
-        // console.log(body);
-        
     });
 }

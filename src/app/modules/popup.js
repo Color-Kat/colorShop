@@ -36,4 +36,47 @@ function popupClose(){
         popup.remove();
     }, 1000);
 }
-export {popup, popupClose}
+
+let sure = (text = 'Вы уверены?')=>{
+    document.querySelector('#root').insertAdjacentHTML('beforeEnd',
+                                                       '<div class="sure">'+
+                                                            '<div class="sureText">'+text+'</div>'+
+                                                            '<div class="surefooter"><button data-confirm="ok">Ok</button><button data-confirm="cancel">Отмена</button></div>'+
+                                                       '</div>'
+    );
+    // fade
+    setTimeout(() => {
+        document.querySelector('.sure').style.opacity = 1;
+    }, 0.1);
+
+
+    let elem = document.querySelector('.sure');
+    
+    // close block when outside click
+    function outsideClickListener(event) {
+        if (!elem.contains(event.target)) {  // проверяем, что клик не по элементу и элемент виден
+            elem.style.opacity = 0;
+            document.removeEventListener('click', outsideClickListener);
+
+            setTimeout(() => {
+                elem.remove();
+            }, 200);
+        }
+    }
+    setTimeout(() => {
+        document.removeEventListener('click', outsideClickListener);
+        document.addEventListener('click', outsideClickListener);
+    }, 10);
+
+
+    // return true\false on click
+    let promise;
+    return promise = new Promise((resolve) => {
+        document.querySelector('.surefooter button[data-confirm="ok"]').onclick = ()=>{resolve(true);}
+        document.querySelector('.surefooter button[data-confirm="cancel"]').onclick = ()=>{resolve(false);}
+      
+    });
+
+}
+
+export {popup, popupClose, sure}

@@ -182,7 +182,21 @@ window.openChat = function (thisEl, byId, buyer, seller, goodId) {
                 window.currentChat = myChatId;
                 // read
                 delete window.pushs[myChatId];
-                savePushs();
+                let senderHe = chat['me'] == 1 ? 0 : 1;
+                savePushs(true, myChatId, senderHe);
+
+                if ( interlocutor != myChatId ) 
+                    // i'm buyer, send message to seller 
+                    wsSend(JSON.stringify ({command: "message", 
+                                            to: interlocutor,
+                                            from: myChatId,
+                                            message: "readed"}));
+                else 
+                    // i'm seler, send message to buyer 
+                    wsSend(JSON.stringify ({command: "message", 
+                                            to: chat['data']['buyerId'] + chat['data']['chatId'],
+                                            from: myChatId,
+                                            message: "readed"}));
 
                 // insert the adress with id into the history
                 if (chat['data']['chatId'] != undefined){
@@ -200,11 +214,21 @@ window.openChat = function (thisEl, byId, buyer, seller, goodId) {
                     for (let i=0; i<chat['message'].length; i++){
                         // if me is sender
                         if (chat['sender'][i] == chat['me']) {
+                            let isReaded;
                             // сustomer notice
-                            chatBlock.innerHTML += '<div class="chatItem me">'+chat['message'][i]+'<div class="chatDate">'+chat['date'][i]+'</div></div>';
+                            if (chat['status'][i] == 1) {
+                                chat['status'][i] = 'прочитанно';
+                                isReaded = true;
+                            }
+                            if (chat['status'][i] == 0){
+                                chat['status'][i] = 'непрочитанно';
+                                isReaded = false;
+                            }
+                            chatBlock.innerHTML += '<div class="chatItem me">'+chat['message'][i]+'<div class="chatDate">'+chat['date'][i]+'</div><div class="readed" data-readed="'+isReaded+'">'+chat['status'][i]+'</div></div>';
                         }
                         // seller messege
                         else{
+                            // console.log();
                             chatBlock.innerHTML += '<div class="chatItem he">'+chat['message'][i]+'<div class="chatDate">'+chat['date'][i]+'</div></div>';
                         }
                     }
@@ -246,7 +270,7 @@ window.openChat = function (thisEl, byId, buyer, seller, goodId) {
                                                     myId: myId}));
 
                             // display my message on the right
-                            chatBlock.innerHTML += '<div class="chatItem me">'+message+'</div>';
+                            chatBlock.innerHTML += '<div class="chatItem me">'+message+'<div class="readed" data-readed="false">непрочитанно</div></div>';
                             messInput.value = '';
 
                             // scroll to bottom

@@ -260,10 +260,14 @@ window.addLike = (id, liked, likeElem)=>{
 }
 
 
-let thisSlide;
+let thisSlide = 1;
 
 window.openGood = (id, e) => {
+    // delete good
     if(e != undefined && e != false) if (e.target.tagName == 'SPAN') return false;
+    // edit good
+    if(e != undefined && e != false) if (e.target.className == 'orderSettins') return false;
+    
     window.action = 'Good';
 
     let openGood = {
@@ -282,8 +286,19 @@ window.openGood = (id, e) => {
         return response.text();
     }).then(res => {
         thisSlide = 1;
-        res = JSON.parse(res);
-        console.log(res);
+        try{res = JSON.parse(res);}
+        catch{
+            console.log(111);
+            // color is hidden
+            let color = document.querySelector('#color');
+            if(color) color.style.visibility = 'hidden';
+                      window.el.main.style.overflowY = 'hidden';
+            
+            document.querySelectorAll('main >:not(#color)').forEach(e=>{ e.remove();});
+
+            window.el.main.innerHTML += '<div class="goodErr">Товара не существует<div>';
+            return false;
+        }
 
         // window.isBottom = false;
         window.homeOpening = false;
@@ -300,7 +315,6 @@ window.openGood = (id, e) => {
             
                 // is good added?
             isAdded(res['id']).then((add)=>{
-                console.log(res['id']);
                 document.querySelectorAll('main >:not(#color)').forEach(e=>{ e.remove();});
                 // insert var in html code
                 window.el.main.innerHTML += react(html, {
@@ -427,6 +441,96 @@ window.openGood = (id, e) => {
                 
                 checkSlide();
 
+                document.querySelector('#goodCard').removeEventListener('touchstart', handleTouchStart, false);        
+                document.querySelector('#goodCard').removeEventListener('touchmove', handleTouchMove, false);
+
+                document.querySelector('#goodCard').addEventListener('touchstart', handleTouchStart, false);        
+                document.querySelector('#goodCard').addEventListener('touchmove', handleTouchMove, false);
+
+                let xDown = null;                                                        
+                let yDown = null;
+
+                function getTouches(evt) {
+                    return evt.touches
+                }                                                     
+
+                function handleTouchStart(evt) {
+                    const firstTouch = getTouches(evt)[0];                                      
+                    xDown = firstTouch.clientX;                                      
+                    yDown = firstTouch.clientY;                                      
+                };                                                
+
+                let slide_1 = document.querySelector('#slide_1');
+                let slide_2 = document.querySelector('#slide_2');
+
+                let transition = document.querySelector('#transition');
+
+                function handleTouchMove(evt) {
+                    if ( ! xDown || ! yDown ) {
+                        return;
+                    }
+
+                    let xUp = evt.touches[0].clientX;                                    
+                    let yUp = evt.touches[0].clientY;
+
+                    let xDiff = xDown - xUp;
+                    let yDiff = yDown - yUp;
+                    
+                    if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+                        if ( xDiff > 5 ) {
+                            console.log('left');
+                            
+                            /* left swipe */
+                            if ( thisSlide == 2 ) return;
+                            
+                            
+                            right.style.display = 'none';
+                            left.style.display = 'block';
+
+                            slide_2.style.left = '0';
+                            slide_1.style.left = '-100%';
+
+                            slide_2.style.display = 'block';
+
+                            transition.style.right = '0';
+                            transition.style.width = '100%';
+                            setTimeout(() => {
+                                transition.style.right = 'auto';
+                                transition.style.left = '0';
+                                transition.style.width = '0';
+                            }, 200);
+                            thisSlide = 2;
+                        } else if ( xDiff < -5 ){
+                            /* right swipe */
+                            if ( thisSlide == 1 ) return;
+
+                            left.style.display = 'none';
+                            right.style.display = 'block';
+
+                            slide_1.style.left = '0';
+                            slide_2.style.left = '100%';
+
+                            slide_1.style.display = 'block';
+
+                            // transition
+                            transition.style.width = '100%';
+                            transition.style.left = '0';
+                            setTimeout(() => {
+                                transition.style.left = 'auto';
+                                transition.style.right = '0';
+                                transition.style.width = '0';
+                            }, 200);
+
+                            thisSlide = 1;
+                        }                       
+                    } else {
+                        return;                                                                
+                    }
+                    /* reset values */
+                    xDown = null;
+                    yDown = null;                                             
+                };
+
                         // ADD TO HISTORY
                 window.story = false;
                 // if(addH)
@@ -451,10 +555,6 @@ window.openGood = (id, e) => {
                 
                 if(isLiked == 'true')        document.querySelector('.toLike').innerHTML = 'Убрать из избранного';
                 else if (isLiked == 'false') document.querySelector('.toLike').innerHTML = 'Добавить в избранное';
-
-                // let hTopBLock = document.querySelector('#goodImage').naturalHeight;
-                // document.querySelector('.miniToTop').style.height = hTopBLock+' !important';
-                // console.log(hTopBLock);
             })
         });
     });
@@ -497,7 +597,6 @@ function isAdded (id) {
     }).then(response => {
         return response.text();
     }).then(res => {
-        console.log(res);
         if(res != 'login') {
             res = JSON.parse(res);
             return res;
@@ -515,7 +614,6 @@ function checkSlide(transit = false){
     let right = document.querySelector('#toRight');//right arrow
 
     let transition = document.querySelector('#transition');
-
 
     if(thisSlide == 1) {
         // circle-left is hidden
@@ -537,7 +635,6 @@ function checkSlide(transit = false){
                 transition.style.width = '0';
             }, 200);
         }
-
     }
     if(thisSlide == 2) {
         // circle-right is hidden
@@ -560,7 +657,6 @@ function checkSlide(transit = false){
             }, 200);
         }
     }
-
 }
 
 

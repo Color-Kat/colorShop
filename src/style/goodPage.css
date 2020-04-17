@@ -4,6 +4,13 @@
   .icon-circle-left:before {
     content: "\ea44";
   }
+
+.goodErr{
+    font-size: 45px;
+    font-family: DejaVu Sans Mono;
+    font-weight: bold;
+    color: rgba(77, 77, 77, 1);
+}
 #goodCard{
     position: fixed;
     width: 75%;

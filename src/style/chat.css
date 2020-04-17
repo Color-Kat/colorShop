@@ -60,7 +60,9 @@
 
 .chatItem{
     position: relative;
-    width: 50%;
+    width: max-content;
+    max-width: 50%;
+    min-width: 30%;
     height: max-content;
     word-wrap: break-word;
     /* word-break: break-all; */
@@ -70,11 +72,14 @@
     margin: 10px;
     padding: 12px;
     font-size: 22px;
-    left: calc(50% - 20px);
+    /* left: calc(50% - 20px); */
+    left: 100%;
+    transform: translateX(calc(-100% - 20px));
     font-family: -apple-system,BlinkMacSystemFont,Roboto,Open Sans,Helvetica Neue,"Noto Sans Armenian","Noto Sans Bengali","Noto Sans Cherokee";
 }
 .he{
     left: 0;
+    transform: translateX(0);
     border-bottom-left-radius: 0;
 }
 .me{ border-bottom-right-radius: 0; }
@@ -156,6 +161,12 @@
     font-size: 12px;
     position: relative;
     margin-top: 5px;
+}
+.readed{
+    font-size: 12px;
+    width: max-content;
+    margin-top: 5px;
+    left: 0;
 }
 
 @media screen and (max-width: 640px){

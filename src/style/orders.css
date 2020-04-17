@@ -25,6 +25,30 @@
     justify-content: center;
     display: inline !important;
 }
+    #orderSetList{
+        position: fixed;
+        width: 150px;
+        height: 90px;
+        background: rgba(167, 167, 167, 0.8);
+        border-radius: 14px 0px 14px 14px;
+        z-index: 100000;
+        overflow: hidden;
+        padding: 5px;
+        background: linear-gradient(90deg, #39B9FF, #003BE4);
+        transition: all .2s ease-in-out;
+        opacity: 1;
+    }
+        .setItem{
+            font-family: DejaVu Sans Mono, Arial;
+            width: 100%;
+            height: calc(100% / 3);
+            color: white;
+            vertical-align: middle;
+            display: flex;
+            align-items: center;
+            padding-left: 7px;
+            cursor: pointer;
+        }
 .orderItem{
     border-radius: 17px;
     position: relative;
@@ -44,6 +68,7 @@
     background: linear-gradient(90deg, #39B9FF, #003BE4);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    cursor: pointer;
 }
 
 .orderItem img{
