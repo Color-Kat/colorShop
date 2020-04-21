@@ -286,10 +286,11 @@ window.editGood = function (id, e) {
                 render('sell', false).then((html)=>{
                     window.el.info.innerHTML = html;
                     // not new good - update old good
-                    sell('update').then(()=>{
+                    sell('update', res).then(()=>{
                         // insert name
                         
                         document.querySelector('#protoName').innerText = res['goodName'];
+                        document.querySelector('#createName').value = res['goodName'];
                         // description
                         document.querySelector('#createDescr').value = res['descr'];
                         // cost
@@ -301,7 +302,6 @@ window.editGood = function (id, e) {
                         document.querySelector('#numberPhone').value = res['sellerNumber'];
 
                         // image
-                        document.querySelector('#createImg').setAttribute('value', 'goods/'+res['img']);
                         document.querySelector('#protoImg').setAttribute('src', 'goods/'+res['img']);
     
                         // restore categorie
@@ -345,24 +345,27 @@ window.editGood = function (id, e) {
             }, 200);
 
         if ( sured == true ) {
-            // let edit = {
-            //     'action' : 'editMyGood',
-            //     'id' : id
-            // }
-            // let body = new FormData();
-            // for(let variable in edit) body.append(variable, edit[variable]);
+            console.log('продано');
+            let sold = {
+                'action' : 'soldGood',
+                'id' : id
+            }
+            let body = new FormData();
+            for(let variable in sold) body.append(variable, sold[variable]);
         
-            // fetch(phpPath,{
-            //     method : 'post',
-            //     mode   : 'cors',
-            //     credentials:'include',
-            //     body   : body
-            // }).then(response => {
-            //     return response.json();
-            // }).then(res => { 
-                
-               
-            // });
+            fetch(phpPath,{
+                method : 'post',
+                mode   : 'cors',
+                credentials:'include',
+                body   : body
+            }).then(response => {
+                return response.json();
+            }).then(res => { 
+                console.log(res);
+                if(res==true){
+                    popup('Ваша репутация повысилась');
+                }
+            });
         }
     }
 }

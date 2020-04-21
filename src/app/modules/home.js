@@ -441,11 +441,11 @@ window.openGood = (id, e) => {
                 
                 checkSlide();
 
-                document.querySelector('#goodCard').removeEventListener('touchstart', handleTouchStart, false);        
-                document.querySelector('#goodCard').removeEventListener('touchmove', handleTouchMove, false);
+                document.querySelector('#goodCard').removeEventListener('touchstart', handleTouchStart, { passive: true });        
+                document.querySelector('#goodCard').removeEventListener('touchmove', handleTouchMove, { passive: true });
 
-                document.querySelector('#goodCard').addEventListener('touchstart', handleTouchStart, false);        
-                document.querySelector('#goodCard').addEventListener('touchmove', handleTouchMove, false);
+                document.querySelector('#goodCard').addEventListener('touchstart', handleTouchStart, { passive: true });        
+                document.querySelector('#goodCard').addEventListener('touchmove', handleTouchMove, { passive: true });
 
                 let xDown = null;                                                        
                 let yDown = null;

@@ -2,19 +2,36 @@ import {randomString} from './randStr';
 import {popup} from './popup';
 import {phpPath} from './php';
 import {select} from './select';
+import {render} from './render';
+import {profile} from './profile';
 import MaskInput from 'mask-input';
 
 let name = '',
     description = '',
     cost = '',
-    image = '',
-    adr   = '';
+    image = '';
 
+window.adr   = '';
 window.categorie != ''
 
 let current_input_number = 1;
 
-export async function sell(action = false){
+// *********
+// action = new good/update good
+// setVars - when updating, substitute product values
+// *********
+export async function sell(action = false, setVars = false){
+    // substitute values
+    if (setVars != false){
+        name = setVars['goodName'];
+        description = setVars['descr'];
+        cost = setVars['cost'];
+        window.adr   = setVars['sellerAdress'];
+
+        // image
+        image = true;
+    }
+    
     let goBtn = document.querySelector('#goCreate');
     goBtn.value = randomString('Вперед!','Повесить','Написать', 'Создать', 'Отправить', 'Записать', 'Продать', 'Ок');
     // image
@@ -28,6 +45,7 @@ export async function sell(action = false){
     // location
     document.querySelector('#location').oninput = (e)=>{
         readAdress(e.target.value).then((adresses)=>{
+            if (adresses == undefined) return;
             adresses = adresses['suggestions'];
 
             // adresses is empty
@@ -73,8 +91,11 @@ export async function sell(action = false){
 
     await showCategories();
 
-    if (action == false) goBtn.onclick = ()=>{hang('new')};
-    else if(action == 'update') goBtn.onclick = ()=>{hang('update')};
+    // if (action == false) goBtn.onclick = ()=>{hang('new')};
+    if (action == false) 
+        document.querySelector('#sellForm').onsubmit = e => {hang('new', false, e)}
+    else 
+        document.querySelector('#sellForm').onsubmit = e =>{hang('update', setVars['id'], e)}
 }
 
 let specList = [];
@@ -118,7 +139,7 @@ window.adressUp = (e) => {
 }
 
 function readFile(input) {
-    if (input.files && input.files[0]) {    
+    if (input.files && input.files[0]) {  
         let reader = new FileReader();
         reader.onload = function(e) {
             document.querySelector('#protoImg').setAttribute('src', e.target.result);
@@ -150,41 +171,49 @@ function readAdress (query){
         .catch(console.error);
 }
 
-function hang(action, e){
+function hang(action, id, e){
+    e.preventDefault();
     let number = document.querySelector('#numberPhone').value.search('_');
+
     if(cost!='' && name!='' && description!='' && image!='' && window.adr != '' && number == -1 && window.categorie != ''){
-        document.querySelector('#sellForm').addEventListener('submit', function(event){
-            event.preventDefault();
-
-            let bodySell = new FormData(this);
-            
-            if(action =='new') bodySell.append('action', 'sell');
-            if(action =='update') bodySell.append('action', 'updateSell');
-
-            bodySell.append('categorie', window.categorie);
-
-            // for(var pair of bodySell.entries()) {
-            //     console.log(pair[0]+ ', '+ pair[1]); 
-            // }
+        let bodySell = new FormData(document.querySelector('#sellForm'));
+        bodySell.append('categorie', window.categorie);
+        if(action =='new') bodySell.append('action', 'sell');
+        if(action =='update') {
+            // edit good
+            bodySell.append('action', 'updateSell');
+            // edit good where id = id
+            bodySell.append('id', id);
+        }
         
-            fetch(phpPath,{
-                method : 'post',
-                mode   : 'cors',
-                credentials: 'include',
-                body   : bodySell
-            }).then(response => {
-                return response.text();
-            }).then(res => {
-                if(res == 'type')
-                    popup('Тип изображения может быть только jpg(jpeg) или png');
-                else if (res == 'size')
-                    popup('Размер не должен превышать 3Мб');
-                if(res == true)
-                    this.reset(); // очищаем поля формы 
-                    
-                // clear protoImg
-                document.querySelector('#protoImg').setAttribute('src', "./svg/nonePhote.svg");
-            });
+        // print formData
+        // for(var pair of bodySell.entries()) {
+        //     console.log(pair[0]+ ', '+ pair[1]); 
+        // }
+
+        fetch(phpPath,{
+            method : 'post',
+            mode   : 'cors',
+            credentials: 'include',
+            body   : bodySell
+        }).then(response => {
+            return response.text();
+        }).then(res => {
+            console.log(res);
+            if(res == 'type')
+                popup('Тип изображения может быть только jpg(jpeg) или png');
+            else if (res == 'size')
+                popup('Размер не должен превышать 3Мб');
+            if(res == true){
+                render('profile').then(html => {
+                    document.querySelectorAll('main >:not(#color)').forEach(e=>{ e.remove();});
+                    window.el.main.innerHTML += html;
+                    profile();
+                });
+            }    
+                
+            // clear protoImg
+            document.querySelector('#protoImg').setAttribute('src', "./svg/nonePhote.svg");
         });
     }
 }

@@ -239,7 +239,12 @@
     bottom: 0;
 }
 
-.protoGood img {z-index: 100;}
+.protoGood img {
+    z-index: 100;
+    position: absolute;
+    top: calc((100% - 78px) / 2);
+    transform: translateY(-50%);
+}
 
 .protoGood:before {
     position: absolute;
